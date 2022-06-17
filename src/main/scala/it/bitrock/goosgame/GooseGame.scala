@@ -3,13 +3,17 @@ package it.bitrock.goosgame
 class GooseGame {
 
   var players: Map[String, Int] = Map.empty[String, Int]
+  val commandResultBuilder = new CommandResultBuilder
+
+  val WIN_POSITION = 63
 
   def addPNewPlayer(newPlayer: String): CommandResult = {
     players.find(p => p._1 == newPlayer) match {
-      case Some(p) => CommandResult(s"$newPlayer: already existing player")
+      case Some(p) =>
+        commandResultBuilder.addPlayerCommandResult(newPlayer, true)
       case (None) =>
         players = players + (newPlayer -> 0)
-        CommandResult(s"add player $newPlayer")
+        commandResultBuilder.addPlayerCommandResult(newPlayer, false)
     }
   }
 
@@ -18,30 +22,48 @@ class GooseGame {
       case Some(p) =>
         val oldPosition = p._2
         val newPosition = sum(p._2, sum(dice1, dice2))
-        updatePosition(player, newPosition)
-        CommandResult(
-          s"$player rolls $dice1, $dice2. $player move from ${decodePositionForMessage(oldPosition)} to $newPosition"
+        val hasWon = checkWin(newPosition)
+        val positionBounceChecked = newPositionIfBounce(newPosition)
+        updatePosition(player, positionBounceChecked)
+        commandResultBuilder.buildMoveCommandResult(
+          player,
+          dice1,
+          dice2,
+          oldPosition,
+          hasWon,
+          Tuple3(
+            newPosition,
+            positionBounceChecked._1,
+            positionBounceChecked._2
+          )
         )
       case (None) =>
-        CommandResult(s"Player $player not Found!")
+        commandResultBuilder.playerNotFoundCommandResult(player)
     }
-
   }
 
   private val sum: (Int, Int) => Int = (d1: Int, d2: Int) => d1 + d2
 
-  private def updatePosition(player: String, newPosition: Int): Unit = {
+  private def updatePosition(
+      player: String,
+      newPosition: Tuple2[Int, Boolean]
+  ): Unit = {
     players = players - player
-    players = players + (player -> newPosition)
+    players = players + (player -> newPosition._1)
   }
 
-  private def decodePositionForMessage(position: Int): String = {
-    position match {
-      case 0 => "Start"
-      case _ => position.toString
+  private val checkWin: (Int) => Boolean = (newPosition: Int) =>
+    newPosition == WIN_POSITION
+
+  private val newPositionIfBounce: (Int) => Tuple2[Int, Boolean] =
+    (newPosition: Int) => {
+      val bounce = newPosition > WIN_POSITION
+      if (bounce) {
+        val recalculatedPosition = WIN_POSITION - (newPosition - WIN_POSITION)
+        Tuple2(recalculatedPosition, true)
+      } else
+        Tuple2(newPosition, false)
     }
-  }
-
 }
 
 //TODO: Move to TestCase class
@@ -61,4 +83,10 @@ object TestMovePlayer extends App {
 
   val moveResult = goose.movePlayer("John", 4, 4)
   println(moveResult.message)
+
+  val bounceResult = goose.movePlayer("John", 44, 13)
+  println(bounceResult.message)
+
+  val winResult = goose.movePlayer("John", 1, 1)
+  println(winResult.message)
 }
