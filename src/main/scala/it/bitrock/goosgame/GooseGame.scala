@@ -1,11 +1,13 @@
 package it.bitrock.goosgame
+import scala.util.Random
 
 class GooseGame {
 
   var players: Map[String, Int] = Map.empty[String, Int]
-  val commandResultBuilder = new CommandResultBuilder
 
+  val commandResultBuilder = new CommandResultBuilder
   val WIN_POSITION = 63
+  val random = new Random
 
   def addPNewPlayer(newPlayer: String): CommandResult = {
     players.find(p => p._1 == newPlayer) match {
@@ -18,6 +20,15 @@ class GooseGame {
   }
 
   def movePlayer(player: String, dice1: Int, dice2: Int): CommandResult = {
+    doMovePlayer(player, dice1, dice2)
+  }
+
+  def movePlayer(player: String): CommandResult = {
+    val dices = rollDices();
+    doMovePlayer(player, dices._1, dices._2)
+  }
+
+  private def doMovePlayer(player: String, dice1: Int, dice2: Int): CommandResult = {
     players.find(p => p._1 == player) match {
       case Some(p) =>
         val oldPosition = p._2
@@ -64,6 +75,16 @@ class GooseGame {
       } else
         Tuple2(newPosition, false)
     }
+
+  private def rollDices(): Tuple2[Int, Int] = {
+    val MIN_RESULT_DICE = 1
+    val MAX_RESULT_EXCLUSIVE_DICE = 7
+    val result = Tuple2(
+      random.between(MIN_RESULT_DICE, MAX_RESULT_EXCLUSIVE_DICE),
+      random.between(MIN_RESULT_DICE, MAX_RESULT_EXCLUSIVE_DICE)
+    )
+    result
+  }
 }
 
 //TODO: Move to TestCase class
@@ -89,4 +110,6 @@ object TestMovePlayer extends App {
 
   val winResult = goose.movePlayer("John", 1, 1)
   println(winResult.message)
+}
+
 }
