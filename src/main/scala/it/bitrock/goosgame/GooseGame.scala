@@ -1,4 +1,6 @@
 package it.bitrock.goosgame
+import it.bitrock.goosgame.TestMovePlayer.goose
+
 import scala.util.Random
 
 class GooseGame {
@@ -20,19 +22,32 @@ class GooseGame {
   }
 
   def movePlayer(player: String, dice1: Int, dice2: Int): CommandResult = {
-    doMovePlayer(player, dice1, dice2)
+    doMovePlayer(player, Tuple2(dice1, dice2))
   }
 
   def movePlayer(player: String): CommandResult = {
     val dices = rollDices();
-    doMovePlayer(player, dices._1, dices._2)
+    doMovePlayer(player, dices)
   }
 
-  private def doMovePlayer(player: String, dice1: Int, dice2: Int): CommandResult = {
+  private def doMovePlayer(
+      player: String,
+      dices: Tuple2[Int, Int]
+  ): CommandResult = {
     players.find(p => p._1 == player) match {
       case Some(p) =>
         val oldPosition = p._2
-        val newPosition = sum(p._2, sum(dice1, dice2))
+        val theoreticalPosition = sum(p._2, sum(dices._1, dices._2))
+        val outcome = Outcome(
+          player,
+          dices,
+          oldPosition,
+          theoreticalPosition,
+          theoreticalPosition
+        )
+        updatePosition(outcome)
+        commandResultBuilder.buildMoveCommandResult(outcome)
+      /*
         val hasWon = checkWin(newPosition)
         val positionBounceChecked = newPositionIfBounce(newPosition)
         updatePosition(player, positionBounceChecked)
@@ -48,6 +63,9 @@ class GooseGame {
             positionBounceChecked._2
           )
         )
+
+       */
+
       case (None) =>
         commandResultBuilder.playerNotFoundCommandResult(player)
     }
@@ -55,12 +73,9 @@ class GooseGame {
 
   private val sum: (Int, Int) => Int = (d1: Int, d2: Int) => d1 + d2
 
-  private def updatePosition(
-      player: String,
-      newPosition: Tuple2[Int, Boolean]
-  ): Unit = {
-    players = players - player
-    players = players + (player -> newPosition._1)
+  private def updatePosition(outcome: Outcome): Unit = {
+    players = players - outcome.player
+    players = players + (outcome.player -> outcome.realPosition)
   }
 
   private val checkWin: (Int) => Boolean = (newPosition: Int) =>
@@ -112,4 +127,14 @@ object TestMovePlayer extends App {
   println(winResult.message)
 }
 
+object TestMoveBridge extends App {
+  val goose = new GooseGame()
+  val resultJohn = goose.addPNewPlayer("John");
+
+  val move1 = goose.movePlayer("John", 2, 2)
+  println(move1.message)
+
+  val moveResult = goose.movePlayer("John", 1, 1)
+  println(moveResult.message)
+  println(goose.movePlayer("John", 1, 1).message)
 }

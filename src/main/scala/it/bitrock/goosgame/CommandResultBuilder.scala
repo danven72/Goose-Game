@@ -12,23 +12,39 @@ class CommandResultBuilder {
       CommandResult(s"add player $newPlayer")
   }
 
-  def buildMoveCommandResult(
-      player: String,
-      dice1: Int,
-      dice2: Int,
-      oldPosition: Int,
-      win: Boolean,
-      newPositionBounceChecked: Tuple3[Int, Int, Boolean]
-  ): CommandResult = {
-    var message =
-      s"$player rolls $dice1, $dice2. $player move from ${decodePositionForMessage(oldPosition)} to ${newPositionBounceChecked._1}"
-    if (win)
-      message = message + s". $player Wins!!"
-    if (newPositionBounceChecked._3)
-      message =
-        message + s". $player bounces! $player return to ${newPositionBounceChecked._2}"
+  def buildMoveCommandResult(outcome: Outcome): CommandResult = {
+    outcome match {
+      case Win(p1, p2, p3, p4, p5) => {
+        val theMessage =
+          buildMoveMessage(outcome, s". ${outcome.player} Wins!!")
+        CommandResult(theMessage)
+      }
+      case Bounce(p1, p2, p3, p4, p5) => {
+        val theMessage = buildMoveMessage(
+          outcome,
+          s". ${outcome.player} bounces! ${outcome.player} return to ${outcome.realPosition}"
+        )
+        CommandResult(theMessage)
+      }
+      case Ordinary(p1, p2, p3, p4, p5) =>
+        CommandResult(buildMoveMessage(outcome, ""))
+      case Bridge(p1, p2, p3, p4, p5) =>
+        CommandResult(
+          buildMoveMessage(
+            outcome,
+            s" ${outcome.player} jumps to ${outcome.realPosition}"
+          )
+        )
+    }
+  }
 
-    CommandResult(message)
+  private def buildMoveMessage(outcome: Outcome, fromResult: String): String = {
+    val message =
+      s"${outcome.player} rolls ${outcome.dices._1}, ${outcome.dices._2}. ${outcome.player} move from ${decodePositionForMessage(
+        outcome.oldPosition
+      )} to ${decodePositionForMessage(outcome.theoreticalPosition)}"
+
+    message + fromResult
   }
 
   def playerNotFoundCommandResult(player: String): CommandResult =
@@ -37,6 +53,7 @@ class CommandResultBuilder {
   private def decodePositionForMessage(position: Int): String = {
     position match {
       case 0 => "Start"
+      case 6 => "The Bridge."
       case _ => position.toString
     }
   }
