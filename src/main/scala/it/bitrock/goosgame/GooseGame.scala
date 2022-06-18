@@ -47,25 +47,6 @@ class GooseGame {
         )
         updatePosition(outcome)
         commandResultBuilder.buildMoveCommandResult(outcome)
-      /*
-        val hasWon = checkWin(newPosition)
-        val positionBounceChecked = newPositionIfBounce(newPosition)
-        updatePosition(player, positionBounceChecked)
-        commandResultBuilder.buildMoveCommandResult(
-          player,
-          dice1,
-          dice2,
-          oldPosition,
-          hasWon,
-          Tuple3(
-            newPosition,
-            positionBounceChecked._1,
-            positionBounceChecked._2
-          )
-        )
-
-       */
-
       case (None) =>
         commandResultBuilder.playerNotFoundCommandResult(player)
     }
@@ -77,19 +58,6 @@ class GooseGame {
     players = players - outcome.player
     players = players + (outcome.player -> outcome.realPosition)
   }
-
-  private val checkWin: (Int) => Boolean = (newPosition: Int) =>
-    newPosition == WIN_POSITION
-
-  private val newPositionIfBounce: (Int) => Tuple2[Int, Boolean] =
-    (newPosition: Int) => {
-      val bounce = newPosition > WIN_POSITION
-      if (bounce) {
-        val recalculatedPosition = WIN_POSITION - (newPosition - WIN_POSITION)
-        Tuple2(recalculatedPosition, true)
-      } else
-        Tuple2(newPosition, false)
-    }
 
   private def rollDices(): Tuple2[Int, Int] = {
     val MIN_RESULT_DICE = 1
@@ -136,5 +104,17 @@ object TestMoveBridge extends App {
 
   val moveResult = goose.movePlayer("John", 1, 1)
   println(moveResult.message)
-  println(goose.movePlayer("John", 1, 1).message)
+
+}
+
+object TestMoveSimpleGoose extends App {
+  val goose = new GooseGame()
+  val resultJohn = goose.addPNewPlayer("John");
+
+  val move1 = goose.movePlayer("John", 1, 2)
+  println(move1.message)
+
+  val moveResult = goose.movePlayer("John", 1, 1)
+  println(moveResult.message)
+
 }

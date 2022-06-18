@@ -40,10 +40,19 @@ case class Bridge(
     realPosition: Int
 ) extends Outcome {}
 
+case class Goose(
+    player: String,
+    dices: Tuple2[Int, Int],
+    oldPosition: Int,
+    theoreticalPosition: Int,
+    realPosition: Int
+) extends Outcome {}
+
 object Outcome {
 
   val BRIDGE_POSITION = 6
   val WIN_POSITION = 63
+  val THE_GOOSE = Set(5, 9, 14, 18, 23, 27)
 
   def apply(
       player: String,
@@ -67,6 +76,14 @@ object Outcome {
         )
       case BRIDGE_POSITION =>
         Bridge(player, dices, oldPosition, theoreticalPosition, 12)
+      case tp if THE_GOOSE.contains(tp) =>
+        Goose(
+          player,
+          dices,
+          oldPosition,
+          theoreticalPosition,
+          theoreticalPosition + dices._1 + dices._2
+        )
 
       case _ =>
         Ordinary(
@@ -98,6 +115,12 @@ object TestOutcome extends App {
   println(
     "outcome is a Bridge: " + bridge
       .isInstanceOf[Bridge] + " - real position is: " + bridge.realPosition
+  )
+
+  val goose1 = Outcome("gino", Tuple2(1, 1), 3, 5, 5)
+  println(
+    "outcome is a Goose: " + goose1
+      .isInstanceOf[Goose] + " - real position is: " + goose1.realPosition
   )
 
 }

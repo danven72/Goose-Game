@@ -12,6 +12,7 @@ class CommandResultBuilder {
       CommandResult(s"add player $newPlayer")
   }
 
+  //Maybe this logic could be inside Outcome...
   def buildMoveCommandResult(outcome: Outcome): CommandResult = {
     outcome match {
       case Win(p1, p2, p3, p4, p5) => {
@@ -33,6 +34,13 @@ class CommandResultBuilder {
           buildMoveMessage(
             outcome,
             s" ${outcome.player} jumps to ${outcome.realPosition}"
+          )
+        )
+      case Goose(p1, p2, p3, p4, p5) =>
+        CommandResult(
+          buildMoveMessage(
+            outcome,
+            s", The Goose. ${outcome.player} moves again and goes to ${outcome.realPosition}"
           )
         )
     }
