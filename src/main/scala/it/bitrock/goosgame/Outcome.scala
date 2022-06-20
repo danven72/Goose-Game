@@ -11,6 +11,24 @@ sealed abstract class Outcome {
   val prankPlayer: Option[(String, Int)]
 
   def realPositionWillBeGoose(): Boolean = THE_GOOSE.contains(realPosition)
+
+  def buildBaseMoveMessage: String = {
+    def decodePositionForMessage(position: Int): String = {
+      position match {
+        case 0 => "Start"
+        case 6 => "The Bridge."
+        case _ => position.toString
+      }
+    }
+    s"${player} rolls ${dices._1}, ${dices._2}. ${player} move from ${decodePositionForMessage(oldPosition)} " +
+      s"to ${decodePositionForMessage(theoreticalPosition)}"
+  }
+
+  def buildSpecificMoveMessage(): String
+
+  def gooseMoveMessage(): String =
+    s", The Goose. ${player} moves again and goes to ${realPosition}"
+
 }
 
 case class Ordinary(
@@ -20,7 +38,11 @@ case class Ordinary(
     theoreticalPosition: Int,
     realPosition: Int,
     prankPlayer: Option[(String, Int)]
-) extends Outcome {}
+) extends Outcome {
+
+  override def buildSpecificMoveMessage(): String =
+    ""
+}
 
 case class Win(
     player: String,
@@ -29,7 +51,11 @@ case class Win(
     theoreticalPosition: Int,
     realPosition: Int,
     prankPlayer: Option[(String, Int)]
-) extends Outcome {}
+) extends Outcome {
+
+  override def buildSpecificMoveMessage(): String =
+    s". ${player} Wins!!"
+}
 
 case class Bounce(
     player: String,
@@ -38,7 +64,10 @@ case class Bounce(
     theoreticalPosition: Int,
     realPosition: Int,
     prankPlayer: Option[(String, Int)]
-) extends Outcome {}
+) extends Outcome {
+  override def buildSpecificMoveMessage(): String =
+    s". ${player} bounces! ${player} return to ${realPosition}"
+}
 
 case class Bridge(
     player: String,
@@ -47,7 +76,10 @@ case class Bridge(
     theoreticalPosition: Int,
     realPosition: Int,
     prankPlayer: Option[(String, Int)]
-) extends Outcome {}
+) extends Outcome {
+  override def buildSpecificMoveMessage(): String =
+    s" ${player} jumps to ${realPosition}"
+}
 
 case class Goose(
     player: String,
@@ -56,7 +88,10 @@ case class Goose(
     theoreticalPosition: Int,
     realPosition: Int,
     prankPlayer: Option[(String, Int)]
-) extends Outcome {}
+) extends Outcome {
+  override def buildSpecificMoveMessage(): String =
+    gooseMoveMessage
+}
 
 case class Prank(
     player: String,
@@ -65,7 +100,16 @@ case class Prank(
     theoreticalPosition: Int,
     realPosition: Int,
     prankPlayer: Option[(String, Int)]
-) extends Outcome {}
+) extends Outcome {
+  override def buildSpecificMoveMessage(): String = {
+    val prankPlayerV =
+      prankPlayer.map(ppOpt => ppOpt._1).getOrElse("Error!!!")
+    val prankPlayerPosition =
+      prankPlayer.map(ppOpt => ppOpt._2).getOrElse("Error!!!")
+
+    s".  On ${theoreticalPosition} there is ${prankPlayerV}, who returns to ${prankPlayerPosition}"
+  }
+}
 
 object Outcome {
 

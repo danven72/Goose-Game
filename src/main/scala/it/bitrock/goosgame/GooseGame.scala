@@ -144,8 +144,8 @@ object TestMoveSimpleGoose extends App {
   val move1 = goose.movePlayer("John", 1, 2)
   println(move1.message)
 
-  val moveResult = goose.movePlayer("John", 1, 1)
-  println(moveResult.message)
+  val gooseResult = goose.movePlayer("John", 1, 1)
+  println(gooseResult.message)
 
 }
 
