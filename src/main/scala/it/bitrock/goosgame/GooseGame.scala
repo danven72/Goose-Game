@@ -32,7 +32,7 @@ class GooseGame {
 
   private def doMovePlayer(
       player: String,
-      dices: Tuple2[Int, Int],
+      dices: (Int, Int),
       previousOutcome: List[Outcome]
   ): CommandResult = {
     players.find(p => p._1 == player) match {
@@ -47,9 +47,8 @@ class GooseGame {
           theoreticalPosition
         )
         val outcomeListUpdate: List[Outcome] = previousOutcome :+ outcome
-        println("outcomeList.size: " + outcomeListUpdate.size)
-        if (outcome.isInstanceOf[Goose]) {
-          println("GOOSE")
+        //println("outcomeList: " + outcomeListUpdate)
+        if (outcome.realPositionWillBeGoose()) {
           updatePosition(outcome)
           doMovePlayer(player, dices, outcomeListUpdate)
         } else {

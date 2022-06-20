@@ -1,11 +1,15 @@
 package it.bitrock.goosgame
 
+import it.bitrock.goosgame.Outcome.THE_GOOSE
+
 sealed abstract class Outcome {
   val player: String
   val dices: (Int, Int)
   val oldPosition: Int
   val theoreticalPosition: Int
   val realPosition: Int
+
+  def realPositionWillBeGoose(): Boolean = THE_GOOSE.contains(realPosition)
 }
 
 case class Ordinary(

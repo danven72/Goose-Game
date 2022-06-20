@@ -44,7 +44,6 @@ class CommandResultBuilder {
           buildMoveMessage(
             outcomeList.head,
             buildGooseMovesMessage(outcomeList, "")
-            //s", The Goose. ${outcomeList.player} moves again and goes to ${outcomeList.realPosition}"
           )
         )
     }
@@ -68,7 +67,6 @@ class CommandResultBuilder {
       case Nil => gooseMessage
       case e => {
         val allGooseMessages = gooseMessage + buildGooseMessage(e.head)
-        println(allGooseMessages)
         buildGooseMovesMessage(outcomeList.tail, allGooseMessages)
       }
     }
