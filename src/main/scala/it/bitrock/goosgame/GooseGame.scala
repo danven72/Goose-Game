@@ -5,7 +5,7 @@ import scala.util.Random
 
 class GooseGame {
 
-  var players: Map[String, Int] = Map.empty[String, Int]
+  private var players: Map[String, Int] = Map.empty[String, Int]
 
   val commandResultBuilder = new CommandResultBuilder
   val WIN_POSITION = 63
@@ -44,7 +44,8 @@ class GooseGame {
           dices,
           oldPosition,
           theoreticalPosition,
-          theoreticalPosition
+          theoreticalPosition,
+          findPrankPlayerIfPresent(theoreticalPosition)
         )
         val outcomeListUpdate: List[Outcome] = previousOutcome :+ outcome
         //println("outcomeList: " + outcomeListUpdate)
@@ -64,6 +65,18 @@ class GooseGame {
   private val sum: (Int, Int) => Int = (d1: Int, d2: Int) => d1 + d2
 
   private def updatePosition(outcome: Outcome): Unit = {
+    outcome.prankPlayer match {
+      case None =>
+        players = players - outcome.player
+        players = players + (outcome.player -> outcome.realPosition)
+
+      case Some(p) =>
+        players = players - outcome.player
+        players = players - p._1
+        players = players + (outcome.player -> outcome.realPosition)
+        players = players + (p._1 -> p._2)
+    }
+
     players = players - outcome.player
     players = players + (outcome.player -> outcome.realPosition)
   }
@@ -77,6 +90,12 @@ class GooseGame {
     )
     result
   }
+
+  private def findPrankPlayerIfPresent(
+      theoreticalPosition: Int
+  ): Option[(String, Int)] = {
+    players.find(p => p._2 == theoreticalPosition)
+  }
 }
 
 //TODO: Move to TestCase class
@@ -87,7 +106,7 @@ object TestAddNewPlayer extends App {
   val resultJohn2 = goose.addPNewPlayer("John");
   println(resultJohn2.message)
 
-  println(goose.players)
+  //println(goose.players)
 }
 
 object TestMovePlayer extends App {
@@ -140,3 +159,16 @@ object TestMoveMultipleGoose extends App {
   println(moveResult.message)
 
 }
+/*
+object TestFindPrankPlayerIfPresent extends App {
+  val goose = new GooseGame()
+  //val resultJohn = goose.addPNewPlayer("John");
+
+  val resultTom = goose.addPNewPlayer("Tom");
+  val tomMoves = goose.movePlayer("Tom", 4, 3)
+  println(tomMoves.message)
+  println(goose.players)
+  val f = goose.findPrankPlayerIfPresent(7)
+  println(f)
+}
+ */

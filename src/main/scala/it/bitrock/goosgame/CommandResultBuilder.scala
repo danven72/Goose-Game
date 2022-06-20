@@ -15,7 +15,7 @@ class CommandResultBuilder {
   //Maybe this logic could be inside Outcome...
   def buildMoveCommandResult(outcomeList: List[Outcome]): CommandResult = {
     outcomeList.head match {
-      case Win(p1, p2, p3, p4, p5) => {
+      case Win(p1, p2, p3, p4, p5, p6) => {
         val theMessage =
           buildMoveMessage(
             outcomeList.head,
@@ -23,23 +23,23 @@ class CommandResultBuilder {
           )
         CommandResult(theMessage)
       }
-      case Bounce(p1, p2, p3, p4, p5) => {
+      case Bounce(p1, p2, p3, p4, p5, p6) => {
         val theMessage = buildMoveMessage(
           outcomeList.head,
           s". ${outcomeList.head.player} bounces! ${outcomeList.head.player} return to ${outcomeList.head.realPosition}"
         )
         CommandResult(theMessage)
       }
-      case Ordinary(p1, p2, p3, p4, p5) =>
+      case Ordinary(p1, p2, p3, p4, p5, p6) =>
         CommandResult(buildMoveMessage(outcomeList.head, ""))
-      case Bridge(p1, p2, p3, p4, p5) =>
+      case Bridge(p1, p2, p3, p4, p5, p6) =>
         CommandResult(
           buildMoveMessage(
             outcomeList.head,
             s" ${outcomeList.head.player} jumps to ${outcomeList.head.realPosition}"
           )
         )
-      case Goose(p1, p2, p3, p4, p5) =>
+      case Goose(p1, p2, p3, p4, p5, p6) =>
         CommandResult(
           buildMoveMessage(
             outcomeList.head,
