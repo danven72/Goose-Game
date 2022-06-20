@@ -77,12 +77,9 @@ class GooseGame {
         players = players + (outcome.player -> outcome.realPosition)
         players = players + (p._1 -> p._2)
     }
-
-    players = players - outcome.player
-    players = players + (outcome.player -> outcome.realPosition)
   }
 
-  private def rollDices(): Tuple2[Int, Int] = {
+  private def rollDices(): (Int, Int) = {
     val MIN_RESULT_DICE = 1
     val MAX_RESULT_EXCLUSIVE_DICE = 7
     val result = Tuple2(

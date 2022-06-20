@@ -24,11 +24,10 @@ sealed abstract class Outcome {
       s"to ${decodePositionForMessage(theoreticalPosition)}"
   }
 
-  def buildSpecificMoveMessage(): String
-
   def gooseMoveMessage(): String =
     s", The Goose. ${player} moves again and goes to ${realPosition}"
 
+  def buildSpecificMoveMessage(): String
 }
 
 case class Ordinary(
@@ -113,9 +112,9 @@ case class Prank(
 
 object Outcome {
 
-  val BRIDGE_POSITION = 6
-  val WIN_POSITION = 63
-  val THE_GOOSE = Set(5, 9, 14, 18, 23, 27)
+  private val BRIDGE_POSITION = 6
+  private val WIN_POSITION = 63
+  private val THE_GOOSE = Set(5, 9, 14, 18, 23, 27)
 
   def apply(
       player: String,
