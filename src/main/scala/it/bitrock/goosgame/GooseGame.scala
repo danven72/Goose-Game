@@ -5,7 +5,8 @@ import scala.util.Random
 
 class GooseGame {
 
-  private var players: Map[String, Int] = Map.empty[String, Int]
+  //TODO: must be private!!
+  var players: Map[String, Int] = Map.empty[String, Int]
 
   val commandResultBuilder = new CommandResultBuilder
   val WIN_POSITION = 63
@@ -172,3 +173,15 @@ object TestFindPrankPlayerIfPresent extends App {
   println(f)
 }
  */
+
+object testPrankResult extends App {
+  val goose = new GooseGame()
+  goose.addPNewPlayer("Pippo")
+  goose.addPNewPlayer("Pluto")
+
+  println(goose.movePlayer("Pippo", 1, 14))
+  println(goose.movePlayer("Pluto", 1, 16))
+  println(goose.players)
+  println(goose.movePlayer("Pippo", 1, 1).message)
+  println(goose.players)
+}

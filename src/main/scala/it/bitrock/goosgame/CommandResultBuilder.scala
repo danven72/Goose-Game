@@ -46,6 +46,17 @@ class CommandResultBuilder {
             buildGooseMovesMessage(outcomeList, "")
           )
         )
+      case Prank(p1, p2, p3, theoreticalPosition, p5, p6) =>
+        val prankPlayer: String = p6.map(pn => pn._1).getOrElse("Error!!!")
+        val prankPlayerPosition =
+          outcomeList.head.prankPlayer.map(pn => pn._2).getOrElse("Error!!!")
+        CommandResult(
+          buildMoveMessage(
+            outcomeList.head,
+            s".  On ${theoreticalPosition} there is ${prankPlayer}, who returns to ${prankPlayerPosition}"
+          )
+        )
+
     }
   }
 
