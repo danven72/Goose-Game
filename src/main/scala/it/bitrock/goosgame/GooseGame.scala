@@ -22,17 +22,18 @@ class GooseGame {
   }
 
   def movePlayer(player: String, dice1: Int, dice2: Int): CommandResult = {
-    doMovePlayer(player, Tuple2(dice1, dice2))
+    doMovePlayer(player, Tuple2(dice1, dice2), List())
   }
 
   def movePlayer(player: String): CommandResult = {
     val dices = rollDices();
-    doMovePlayer(player, dices)
+    doMovePlayer(player, dices, List())
   }
 
   private def doMovePlayer(
       player: String,
-      dices: Tuple2[Int, Int]
+      dices: Tuple2[Int, Int],
+      previousOutcome: List[Outcome]
   ): CommandResult = {
     players.find(p => p._1 == player) match {
       case Some(p) =>
@@ -45,8 +46,17 @@ class GooseGame {
           theoreticalPosition,
           theoreticalPosition
         )
-        updatePosition(outcome)
-        commandResultBuilder.buildMoveCommandResult(outcome)
+        val outcomeListUpdate: List[Outcome] = previousOutcome :+ outcome
+        println("outcomeList.size: " + outcomeListUpdate.size)
+        if (outcome.isInstanceOf[Goose]) {
+          println("GOOSE")
+          updatePosition(outcome)
+          doMovePlayer(player, dices, outcomeListUpdate)
+        } else {
+          updatePosition(outcomeListUpdate.head)
+          commandResultBuilder.buildMoveCommandResult(outcomeListUpdate)
+        }
+
       case (None) =>
         commandResultBuilder.playerNotFoundCommandResult(player)
     }
@@ -110,11 +120,24 @@ object TestMoveBridge extends App {
 object TestMoveSimpleGoose extends App {
   val goose = new GooseGame()
   val resultJohn = goose.addPNewPlayer("John");
+  println(resultJohn.message)
 
   val move1 = goose.movePlayer("John", 1, 2)
   println(move1.message)
 
   val moveResult = goose.movePlayer("John", 1, 1)
+  println(moveResult.message)
+
+}
+
+object TestMoveMultipleGoose extends App {
+  val goose = new GooseGame()
+  val resultJohn = goose.addPNewPlayer("John");
+
+  val move1 = goose.movePlayer("John", 5, 5)
+  println(move1.message)
+
+  val moveResult = goose.movePlayer("John", 2, 2)
   println(moveResult.message)
 
 }

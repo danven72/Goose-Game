@@ -2,7 +2,7 @@ package it.bitrock.goosgame
 
 sealed abstract class Outcome {
   val player: String
-  val dices: Tuple2[Int, Int]
+  val dices: (Int, Int)
   val oldPosition: Int
   val theoreticalPosition: Int
   val realPosition: Int
@@ -10,7 +10,7 @@ sealed abstract class Outcome {
 
 case class Ordinary(
     player: String,
-    dices: Tuple2[Int, Int],
+    dices: (Int, Int),
     oldPosition: Int,
     theoreticalPosition: Int,
     realPosition: Int
@@ -18,7 +18,7 @@ case class Ordinary(
 
 case class Win(
     player: String,
-    dices: Tuple2[Int, Int],
+    dices: (Int, Int),
     oldPosition: Int,
     theoreticalPosition: Int,
     realPosition: Int
@@ -26,7 +26,7 @@ case class Win(
 
 case class Bounce(
     player: String,
-    dices: Tuple2[Int, Int],
+    dices: (Int, Int),
     oldPosition: Int,
     theoreticalPosition: Int,
     realPosition: Int
@@ -34,7 +34,7 @@ case class Bounce(
 
 case class Bridge(
     player: String,
-    dices: Tuple2[Int, Int],
+    dices: (Int, Int),
     oldPosition: Int,
     theoreticalPosition: Int,
     realPosition: Int
@@ -42,7 +42,7 @@ case class Bridge(
 
 case class Goose(
     player: String,
-    dices: Tuple2[Int, Int],
+    dices: (Int, Int),
     oldPosition: Int,
     theoreticalPosition: Int,
     realPosition: Int
@@ -56,7 +56,7 @@ object Outcome {
 
   def apply(
       player: String,
-      dices: Tuple2[Int, Int],
+      dices: (Int, Int),
       oldPosition: Int,
       theoreticalPosition: Int,
       realPosition: Int

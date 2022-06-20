@@ -13,47 +13,69 @@ class CommandResultBuilder {
   }
 
   //Maybe this logic could be inside Outcome...
-  def buildMoveCommandResult(outcome: Outcome): CommandResult = {
-    outcome match {
+  def buildMoveCommandResult(outcomeList: List[Outcome]): CommandResult = {
+    outcomeList.head match {
       case Win(p1, p2, p3, p4, p5) => {
         val theMessage =
-          buildMoveMessage(outcome, s". ${outcome.player} Wins!!")
+          buildMoveMessage(
+            outcomeList.head,
+            s". ${outcomeList.head.player} Wins!!"
+          )
         CommandResult(theMessage)
       }
       case Bounce(p1, p2, p3, p4, p5) => {
         val theMessage = buildMoveMessage(
-          outcome,
-          s". ${outcome.player} bounces! ${outcome.player} return to ${outcome.realPosition}"
+          outcomeList.head,
+          s". ${outcomeList.head.player} bounces! ${outcomeList.head.player} return to ${outcomeList.head.realPosition}"
         )
         CommandResult(theMessage)
       }
       case Ordinary(p1, p2, p3, p4, p5) =>
-        CommandResult(buildMoveMessage(outcome, ""))
+        CommandResult(buildMoveMessage(outcomeList.head, ""))
       case Bridge(p1, p2, p3, p4, p5) =>
         CommandResult(
           buildMoveMessage(
-            outcome,
-            s" ${outcome.player} jumps to ${outcome.realPosition}"
+            outcomeList.head,
+            s" ${outcomeList.head.player} jumps to ${outcomeList.head.realPosition}"
           )
         )
       case Goose(p1, p2, p3, p4, p5) =>
         CommandResult(
           buildMoveMessage(
-            outcome,
-            s", The Goose. ${outcome.player} moves again and goes to ${outcome.realPosition}"
+            outcomeList.head,
+            buildGooseMovesMessage(outcomeList, "")
+            //s", The Goose. ${outcomeList.player} moves again and goes to ${outcomeList.realPosition}"
           )
         )
     }
   }
 
   private def buildMoveMessage(outcome: Outcome, fromResult: String): String = {
-    val message =
-      s"${outcome.player} rolls ${outcome.dices._1}, ${outcome.dices._2}. ${outcome.player} move from ${decodePositionForMessage(
-        outcome.oldPosition
-      )} to ${decodePositionForMessage(outcome.theoreticalPosition)}"
-
+    val message = buildBaseMessage(outcome);
     message + fromResult
   }
+
+  private val buildBaseMessage: Outcome => String = (outcome) =>
+    s"${outcome.player} rolls ${outcome.dices._1}, ${outcome.dices._2}. ${outcome.player} move from ${decodePositionForMessage(
+      outcome.oldPosition
+    )} to ${decodePositionForMessage(outcome.theoreticalPosition)}"
+
+  private def buildGooseMovesMessage(
+      outcomeList: List[Outcome],
+      gooseMessage: String
+  ): String = {
+    outcomeList match {
+      case Nil => gooseMessage
+      case e => {
+        val allGooseMessages = gooseMessage + buildGooseMessage(e.head)
+        println(allGooseMessages)
+        buildGooseMovesMessage(outcomeList.tail, allGooseMessages)
+      }
+    }
+  }
+
+  val buildGooseMessage: Outcome => String = (outcome: Outcome) =>
+    s", The Goose. ${outcome.player} moves again and goes to ${outcome.realPosition}"
 
   def playerNotFoundCommandResult(player: String): CommandResult =
     CommandResult(s"Player $player not Found!")
