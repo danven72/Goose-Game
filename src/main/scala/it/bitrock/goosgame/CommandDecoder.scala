@@ -1,7 +1,5 @@
 package it.bitrock.goosgame
 
-import it.bitrock.goosgame.TestExit.commandDecoder
-
 import scala.io.StdIn._
 
 case class CommandDecoder(gooseGame: GooseGame) extends App {
@@ -45,11 +43,7 @@ case class CommandDecoder(gooseGame: GooseGame) extends App {
       println(
         "player: [" + player + "] dice1: [" + dice1 + "], dice2: [" + dice2 + "]"
       )
-      (
-        player,
-        dice1,
-        dice2
-      )
+      (player, dice1, dice2)
     } else
       (nameAndDices, 0, 0)
   }
@@ -57,33 +51,33 @@ case class CommandDecoder(gooseGame: GooseGame) extends App {
 
 object CommandDecoder {
   val ADD_PLAYER = "add player "
-  val MOVE = "move "
+  val MOVE       = "move "
 
 }
 
 object TestCommandDecoder extends App {
   val commandDecoder = CommandDecoder(new GooseGame)
-  val inputCommand = commandDecoder.readUserInput()
+  val inputCommand   = commandDecoder.readUserInput()
   println(inputCommand.execute().message)
 }
 
 object TestExtractPlayerName extends App {
   val commandDecoder = CommandDecoder(new GooseGame)
-  val inputCommand = commandDecoder.readUserInput()
+  val inputCommand   = commandDecoder.readUserInput()
 }
 
 //write "exit" at prompt
 object TestExit extends App {
   val commandDecoder = CommandDecoder(new GooseGame)
-  val exitCommand = commandDecoder.readUserInput()
+  val exitCommand    = commandDecoder.readUserInput()
   println(exitCommand.execute().message)
 }
 
 object TestGame extends App {
-  val commandDecoder = CommandDecoder(new GooseGame)
+  val commandDecoder  = CommandDecoder(new GooseGame)
   var executedMessage = ""
   while (executedMessage != "exit") {
-    val command = commandDecoder.readUserInput()
+    val command         = commandDecoder.readUserInput()
     val resultExecution = command.execute().message
     println(resultExecution)
     executedMessage = resultExecution

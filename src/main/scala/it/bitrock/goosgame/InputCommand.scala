@@ -6,8 +6,7 @@ sealed trait InputCommand {
 
 abstract class AbstractInputCommand extends InputCommand {}
 
-case class AddPNewPlayerCommand(gooseGame: GooseGame, player: String)
-    extends AbstractInputCommand {
+case class AddPNewPlayerCommand(gooseGame: GooseGame, player: String) extends AbstractInputCommand {
   override def execute(): CommandResult = {
     gooseGame.addPNewPlayer(player)
   }

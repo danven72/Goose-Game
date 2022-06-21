@@ -113,8 +113,8 @@ case class Prank(
 object Outcome {
 
   private val BRIDGE_POSITION = 6
-  private val WIN_POSITION = 63
-  private val THE_GOOSE = Set(5, 9, 14, 18, 23, 27)
+  private val WIN_POSITION    = 63
+  private val THE_GOOSE       = Set(5, 9, 14, 18, 23, 27)
 
   def apply(
       player: String,
@@ -126,65 +126,19 @@ object Outcome {
   ): Outcome = {
 
     prankPlayer match {
-      case Some(p) =>
-        Prank(
-          player,
-          dices,
-          oldPosition,
-          theoreticalPosition,
-          p._2,
-          Some((p._1, oldPosition))
-        )
+      case Some(p) => Prank(player, dices, oldPosition, theoreticalPosition, p._2, Some((p._1, oldPosition)))
       case None =>
         theoreticalPosition match {
-          case WIN_POSITION =>
-            Win(
-              player,
-              dices,
-              oldPosition,
-              theoreticalPosition,
-              realPosition,
-              prankPlayer
-            )
+          case WIN_POSITION => Win(player, dices, oldPosition, theoreticalPosition, realPosition, prankPlayer)
           case tp if (tp > WIN_POSITION) =>
-            val recalculatedPosition =
-              WIN_POSITION - (theoreticalPosition - WIN_POSITION)
-            Bounce(
-              player,
-              dices,
-              oldPosition,
-              theoreticalPosition,
-              recalculatedPosition,
-              prankPlayer
-            )
+            val recalculatedPosition = WIN_POSITION - (theoreticalPosition - WIN_POSITION)
+            Bounce(player, dices, oldPosition, theoreticalPosition, recalculatedPosition, prankPlayer)
           case BRIDGE_POSITION =>
-            Bridge(
-              player,
-              dices,
-              oldPosition,
-              theoreticalPosition,
-              12,
-              prankPlayer
-            )
+            Bridge(player, dices, oldPosition, theoreticalPosition, 12, prankPlayer)
           case tp if THE_GOOSE.contains(tp) =>
-            Goose(
-              player,
-              dices,
-              oldPosition,
-              theoreticalPosition,
-              theoreticalPosition + dices._1 + dices._2,
-              prankPlayer
-            )
-
-          case _ =>
-            Ordinary(
-              player,
-              dices,
-              oldPosition,
-              theoreticalPosition,
-              realPosition,
-              prankPlayer
-            )
+            val newTheoreticalPosition = theoreticalPosition + dices._1 + dices._2
+            Goose(player, dices, oldPosition, theoreticalPosition, newTheoreticalPosition, prankPlayer)
+          case _ => Ordinary(player, dices, oldPosition, theoreticalPosition, realPosition, prankPlayer)
         }
     }
 

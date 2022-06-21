@@ -17,19 +17,6 @@ class CommandResultBuilder {
     }
   }
 
-  @tailrec
-  private def playerListNames(
-      playersNames: List[String],
-      playerStr: String
-  ): String =
-    playersNames match {
-      case Nil => playerStr
-      case p => {
-        val result = playerStr + s", ${p.head}"
-        playerListNames(playersNames.tail, result)
-      }
-    }
-
   def buildMoveCommandResult(outcomeList: List[Outcome]): CommandResult = {
     if (outcomeList.size == 1) {
       val outcome = outcomeList.head
@@ -46,6 +33,22 @@ class CommandResultBuilder {
     }
   }
 
+  def playerNotFoundCommandResult(player: String): CommandResult =
+    CommandResult(s"Player $player not Found!")
+
+  @tailrec
+  private def playerListNames(
+      playersNames: List[String],
+      playerStr: String
+  ): String =
+    playersNames match {
+      case Nil => playerStr
+      case p => {
+        val result = playerStr + s", ${p.head}"
+        playerListNames(playersNames.tail, result)
+      }
+    }
+
   @tailrec
   private def buildGooseMovesMessage(
       outcomeList: List[Outcome],
@@ -59,8 +62,5 @@ class CommandResultBuilder {
         buildGooseMovesMessage(outcomeList.tail, allGooseMessages)
     }
   }
-
-  def playerNotFoundCommandResult(player: String): CommandResult =
-    CommandResult(s"Player $player not Found!")
 
 }
