@@ -10,16 +10,15 @@ case class CommandDecoder(gooseGame: GooseGame) extends App {
     val input = readLine()
     input match {
       case i if i.startsWith(CommandDecoder.ADD_PLAYER) =>
-        //println(s"Add Player Command")
         val player = i.substring((CommandDecoder.ADD_PLAYER.size), i.size)
-        println("[" + player + "]")
+        //println("[" + player + "]")
         AddPNewPlayerCommand(
           gooseGame,
           player
         )
       case i if i.startsWith(CommandDecoder.MOVE) =>
         val playerNameAnDices = extractPlayerNameAndDicesFromMove(i)
-        println(playerNameAnDices)
+        //println(playerNameAnDices)
         if (playerNameAnDices._2 == 0 && playerNameAnDices._3 == 0)
           MovePlayerAutoDicesCommand(gooseGame, playerNameAnDices._1)
         else

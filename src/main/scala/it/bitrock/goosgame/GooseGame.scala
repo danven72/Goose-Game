@@ -6,7 +6,6 @@ import scala.util.Random
 class GooseGame {
 
   val commandResultBuilder           = new OutcomeResultBuilder
-  val WIN_POSITION                   = 63
   val random                         = new Random
   private val sum: (Int, Int) => Int = (d1: Int, d2: Int) => d1 + d2
 

@@ -54,7 +54,7 @@ class OutcomeResultBuilder {
       outcomeList: List[Outcome],
       gooseMessage: String
   ): String = {
-    println("Outcomes: " + outcomeList)
+    //println("Outcomes: " + outcomeList)
     outcomeList match {
       case Nil => gooseMessage
       case e =>
