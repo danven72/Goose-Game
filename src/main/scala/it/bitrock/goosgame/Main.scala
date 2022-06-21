@@ -1,9 +1,12 @@
 package it.bitrock.goosgame
 import scala.io.StdIn._
 import it.bitrock.goosgame.input.{InputCommandDecoder, UnknownCommand}
+import it.bitrock.goosgame.outcomes.OutcomeResultBuilder
 
 class Main {
-  val commandDecoder = InputCommandDecoder(new GooseGame)
+  val outcomeResultBuilder = new OutcomeResultBuilder
+  val gooseGame            = GooseGame(outcomeResultBuilder)
+  val commandDecoder       = InputCommandDecoder(gooseGame)
 
   def displayCommands(): Unit = {
     println("************* THE GOOSE GAME ******************* ")

@@ -3,9 +3,9 @@ import it.bitrock.goosgame.outcomes.{Outcome, OutcomeResult, OutcomeResultBuilde
 
 import scala.util.Random
 
-class GooseGame {
+case class GooseGame(outcomeResultBuilder: OutcomeResultBuilder) {
 
-  val commandResultBuilder           = new OutcomeResultBuilder
+  //val outcomeResultBuilder           = new OutcomeResultBuilder
   val random                         = new Random
   private val sum: (Int, Int) => Int = (d1: Int, d2: Int) => d1 + d2
 
@@ -14,13 +14,13 @@ class GooseGame {
   def addPNewPlayer(newPlayer: String): OutcomeResult = {
     players.find(p => p._1 == newPlayer) match {
       case Some(p) =>
-        commandResultBuilder.addPlayerOutcomeResult(
+        outcomeResultBuilder.addPlayerOutcomeResult(
           true,
           List(newPlayer)
         )
       case (None) =>
         players = players + (newPlayer -> 0)
-        commandResultBuilder.addPlayerOutcomeResult(
+        outcomeResultBuilder.addPlayerOutcomeResult(
           false,
           players.keys.toList
         )
@@ -36,11 +36,7 @@ class GooseGame {
     doMovePlayer(player, dices, List())
   }
 
-  private def doMovePlayer(
-      player: String,
-      dices: (Int, Int),
-      previousOutcome: List[Outcome]
-  ): OutcomeResult = {
+  private def doMovePlayer(player: String, dices: (Int, Int), previousOutcome: List[Outcome]): OutcomeResult = {
     players.find(p => p._1 == player) match {
       case Some(p) =>
         val oldPosition         = p._2
@@ -60,11 +56,10 @@ class GooseGame {
           doMovePlayer(player, dices, outcomeListUpdate)
         } else {
           updatePosition(outcomeListUpdate.head)
-          commandResultBuilder.buildMoveOutcomeResult(outcomeListUpdate)
+          outcomeResultBuilder.buildMoveOutcomeResult(outcomeListUpdate)
         }
-
-      case (None) =>
-        commandResultBuilder.playerNotFoundOutcomeResult(player)
+      case None =>
+        outcomeResultBuilder.playerNotFoundOutcomeResult(player)
     }
   }
 
@@ -101,7 +96,8 @@ class GooseGame {
 
 //TODO: Move to TestCase class
 object TestAddNewPlayer extends App {
-  val goose = new GooseGame()
+  val outcomeResultBuilder = new OutcomeResultBuilder
+  val goose                = GooseGame(outcomeResultBuilder)
 
   val resultJohn = goose.addPNewPlayer("John");
   println(resultJohn.message)
@@ -115,14 +111,18 @@ object TestAddNewPlayer extends App {
 }
 
 object TestAddNewPlayerWhenPlayerAlredyPresent extends App {
-  val goose      = new GooseGame()
+  val outcomeResultBuilder = new OutcomeResultBuilder
+  val goose                = GooseGame(outcomeResultBuilder)
+
   val resultJohn = goose.addPNewPlayer("John");
   println(resultJohn.message)
   val resultJohn2 = goose.addPNewPlayer("John");
   println(resultJohn2.message)
 }
 object TestMovePlayer extends App {
-  val goose      = new GooseGame()
+  val outcomeResultBuilder = new OutcomeResultBuilder
+  val goose                = GooseGame(outcomeResultBuilder)
+
   val resultJohn = goose.addPNewPlayer("John");
 
   val moveResult = goose.movePlayer("John", (4, 4))
@@ -136,7 +136,9 @@ object TestMovePlayer extends App {
 }
 
 object TestBounceAndWin extends App {
-  val goose      = new GooseGame()
+  val outcomeResultBuilder = new OutcomeResultBuilder
+  val goose                = GooseGame(outcomeResultBuilder)
+
   val resultJohn = goose.addPNewPlayer("John");
   goose.movePlayer("John", (0, 62))
   val bounceResult = goose.movePlayer("John", (2, 2))
@@ -150,7 +152,9 @@ object TestBounceAndWin extends App {
 }
 
 object TestMoveBridge extends App {
-  val goose      = new GooseGame()
+  val outcomeResultBuilder = new OutcomeResultBuilder
+  val goose                = GooseGame(outcomeResultBuilder)
+
   val resultJohn = goose.addPNewPlayer("John");
 
   val move1 = goose.movePlayer("John", (2, 2))
@@ -162,7 +166,9 @@ object TestMoveBridge extends App {
 }
 
 object TestMoveSimpleGoose extends App {
-  val goose      = new GooseGame()
+  val outcomeResultBuilder = new OutcomeResultBuilder
+  val goose                = GooseGame(outcomeResultBuilder)
+
   val resultJohn = goose.addPNewPlayer("John");
   println(resultJohn.message)
 
@@ -175,7 +181,9 @@ object TestMoveSimpleGoose extends App {
 }
 
 object TestMoveMultipleGoose extends App {
-  val goose      = new GooseGame()
+  val outcomeResultBuilder = new OutcomeResultBuilder
+  val goose                = GooseGame(outcomeResultBuilder)
+
   val resultJohn = goose.addPNewPlayer("John");
 
   val move1 = goose.movePlayer("John", (5, 5))
@@ -200,7 +208,9 @@ object TestFindPrankPlayerIfPresent extends App {
  */
 
 object testPrankResult extends App {
-  val goose = new GooseGame()
+  val outcomeResultBuilder = new OutcomeResultBuilder
+  val goose                = GooseGame(outcomeResultBuilder)
+
   goose.addPNewPlayer("Pippo")
   goose.addPNewPlayer("Pluto")
 
