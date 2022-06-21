@@ -1,4 +1,6 @@
-package it.bitrock.goosgame
+package it.bitrock.goosgame.input
+
+import it.bitrock.goosgame.GooseGame
 
 import scala.io.StdIn._
 

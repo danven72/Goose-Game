@@ -1,6 +1,6 @@
-package it.bitrock.goosgame
+package it.bitrock.goosgame.outcomes
 
-import it.bitrock.goosgame.Outcome.THE_GOOSE
+import it.bitrock.goosgame.outcomes.Outcome.THE_GOOSE
 
 sealed abstract class Outcome {
   val player: String

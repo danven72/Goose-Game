@@ -1,16 +1,18 @@
 package it.bitrock.goosgame
+import it.bitrock.goosgame.outcomes.{Outcome, OutcomeResult, OutcomeResultBuilder}
+
 import scala.util.Random
 
 class GooseGame {
 
-  val commandResultBuilder           = new CommandResultBuilder
+  val commandResultBuilder           = new OutcomeResultBuilder
   val WIN_POSITION                   = 63
   val random                         = new Random
   private val sum: (Int, Int) => Int = (d1: Int, d2: Int) => d1 + d2
-  //TODO: must be private!!
-  var players: Map[String, Int] = Map.empty[String, Int]
 
-  def addPNewPlayer(newPlayer: String): CommandResult = {
+  private var players: Map[String, Int] = Map.empty[String, Int]
+
+  def addPNewPlayer(newPlayer: String): OutcomeResult = {
     players.find(p => p._1 == newPlayer) match {
       case Some(p) =>
         commandResultBuilder.addPlayerCommandResult(
@@ -26,11 +28,11 @@ class GooseGame {
     }
   }
 
-  def movePlayer(player: String, dices: (Int, Int)): CommandResult = {
+  def movePlayer(player: String, dices: (Int, Int)): OutcomeResult = {
     doMovePlayer(player, dices, List())
   }
 
-  def movePlayer(player: String): CommandResult = {
+  def movePlayer(player: String): OutcomeResult = {
     val dices = rollDices();
     doMovePlayer(player, dices, List())
   }
@@ -39,7 +41,7 @@ class GooseGame {
       player: String,
       dices: (Int, Int),
       previousOutcome: List[Outcome]
-  ): CommandResult = {
+  ): OutcomeResult = {
     players.find(p => p._1 == player) match {
       case Some(p) =>
         val oldPosition         = p._2
@@ -144,7 +146,7 @@ object TestBounceAndWin extends App {
 
   val winResult = goose.movePlayer("John", (1, 2))
   println(winResult.message)
-  println(goose.players)
+  //println(goose.players)
 
 }
 
@@ -205,7 +207,7 @@ object testPrankResult extends App {
 
   println(goose.movePlayer("Pippo", (1, 14)))
   println(goose.movePlayer("Pluto", (1, 16)))
-  println(goose.players)
+  //println(goose.players)
   println(goose.movePlayer("Pippo", (1, 1)).message)
-  println(goose.players)
+  //println(goose.players)
 }

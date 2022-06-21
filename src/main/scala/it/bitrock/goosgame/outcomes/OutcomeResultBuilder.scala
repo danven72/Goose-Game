@@ -1,30 +1,30 @@
-package it.bitrock.goosgame
+package it.bitrock.goosgame.outcomes
 
 import scala.annotation.tailrec
 
-class CommandResultBuilder {
+class OutcomeResultBuilder {
 
   def addPlayerCommandResult(
       present: Boolean,
       playersNames: List[String]
-  ): CommandResult = {
+  ): OutcomeResult = {
     if (present)
-      CommandResult(s"${playersNames.last}: already existing player")
+      OutcomeResult(s"${playersNames.last}: already existing player")
     else {
-      CommandResult(
+      OutcomeResult(
         "players: " + playerListNames(playersNames.tail, playersNames.head)
       )
     }
   }
 
-  def buildMoveCommandResult(outcomeList: List[Outcome]): CommandResult = {
+  def buildMoveCommandResult(outcomeList: List[Outcome]): OutcomeResult = {
     if (outcomeList.size == 1) {
       val outcome = outcomeList.head
-      CommandResult(
+      OutcomeResult(
         outcome.buildBaseMoveMessage + outcome.buildSpecificMoveMessage()
       )
     } else {
-      CommandResult(
+      OutcomeResult(
         outcomeList.head.buildBaseMoveMessage + buildGooseMovesMessage(
           outcomeList,
           ""
@@ -33,8 +33,8 @@ class CommandResultBuilder {
     }
   }
 
-  def playerNotFoundCommandResult(player: String): CommandResult =
-    CommandResult(s"Player $player not Found!")
+  def playerNotFoundCommandResult(player: String): OutcomeResult =
+    OutcomeResult(s"Player $player not Found!")
 
   @tailrec
   private def playerListNames(
