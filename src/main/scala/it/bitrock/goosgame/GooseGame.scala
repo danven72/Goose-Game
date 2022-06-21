@@ -131,11 +131,25 @@ object TestMovePlayer extends App {
   val moveResult = goose.movePlayer("John", (4, 4))
   println(moveResult.message)
 
-  val bounceResult = goose.movePlayer("John", (44, 13))
-  println(bounceResult.message)
+  //val bounceResult = goose.movePlayer("John", (44, 13))
+  //println(bounceResult.message)
 
   val winResult = goose.movePlayer("John", (1, 1))
   println(winResult.message)
+}
+
+object TestBounceAndWin extends App {
+  val goose = new GooseGame()
+  val resultJohn = goose.addPNewPlayer("John");
+  goose.movePlayer("John", (0, 62))
+  val bounceResult = goose.movePlayer("John", (2, 2))
+  println(bounceResult.message)
+  //println(goose.players)
+
+  val winResult = goose.movePlayer("John", (1, 2))
+  println(winResult.message)
+  println(goose.players)
+
 }
 
 object TestMoveBridge extends App {
