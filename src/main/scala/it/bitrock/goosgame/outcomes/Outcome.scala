@@ -106,7 +106,7 @@ case class Prank(
     val prankPlayerPosition =
       prankPlayer.map(ppOpt => ppOpt._2).getOrElse("Error!!!")
 
-    s".  On ${theoreticalPosition} there is ${prankPlayerV}, who returns to ${prankPlayerPosition}"
+    s". On ${theoreticalPosition} there is ${prankPlayerV}, who returns to ${prankPlayerPosition}"
   }
 }
 
@@ -134,7 +134,7 @@ object Outcome {
             val recalculatedPosition = WIN_POSITION - (theoreticalPosition - WIN_POSITION)
             Bounce(player, dices, oldPosition, theoreticalPosition, recalculatedPosition, prankPlayer)
           case BRIDGE_POSITION =>
-            Bridge(player, dices, oldPosition, theoreticalPosition, 12, prankPlayer)
+            Bridge(player, dices, oldPosition, theoreticalPosition, BRIDGE_POSITION * 2, prankPlayer)
           case tp if THE_GOOSE.contains(tp) =>
             val newTheoreticalPosition = theoreticalPosition + dices._1 + dices._2
             Goose(player, dices, oldPosition, theoreticalPosition, newTheoreticalPosition, prankPlayer)
@@ -143,32 +143,4 @@ object Outcome {
     }
 
   }
-}
-
-object TestOutcome extends App {
-
-  val ordinary = Outcome("gino", Tuple2(2, 4), 57, 55, 55, None)
-  println("outcome is a Ordinary: " + ordinary.isInstanceOf[Ordinary])
-
-  val win = Outcome("gino", Tuple2(2, 4), 57, 63, 63, None)
-  println("outcome is a Win: " + win.isInstanceOf[Win])
-
-  val bounce = Outcome("gino", Tuple2(2, 4), 57, 65, 65, None)
-  println(
-    "outcome is a Bounce: " + bounce
-      .isInstanceOf[Bounce] + " - real position is: " + bounce.realPosition
-  )
-
-  val bridge = Outcome("gino", Tuple2(1, 1), 4, 6, 6, None)
-  println(
-    "outcome is a Bridge: " + bridge
-      .isInstanceOf[Bridge] + " - real position is: " + bridge.realPosition
-  )
-
-  val goose1 = Outcome("gino", Tuple2(1, 1), 3, 5, 5, None)
-  println(
-    "outcome is a Goose: " + goose1
-      .isInstanceOf[Goose] + " - real position is: " + goose1.realPosition
-  )
-
 }

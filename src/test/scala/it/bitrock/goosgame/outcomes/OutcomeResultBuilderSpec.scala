@@ -35,4 +35,21 @@ class OutcomeResultBuilderSpec extends AnyFunSuite {
     assert(messageExpected == outcomeResultBuilder.playerNotFoundOutcomeResult(player).message)
   }
 
+  test("buildMoveOutcomeResult when one Outcome present") {
+    val ordinary        = Ordinary("Tom", (2, 2), 7, 11, 11, None)
+    val expectedMessage = ordinary.buildBaseMoveMessage + ordinary.buildSpecificMoveMessage()
+    val result          = outcomeResultBuilder.buildMoveOutcomeResult(List(ordinary))
+    assert(expectedMessage == result.message)
+  }
+
+  test("buildMoveOutcomeResult when one Goose and one Outcome present") {
+    val goose           = Goose("John", (2, 2), 10, 14, 18, None)
+    val ordinary        = Ordinary("John", (2, 2), 18, 22, 22, None)
+    val expectedMessage = goose.buildBaseMoveMessage + goose.gooseMoveMessage() + ordinary.gooseMoveMessage()
+    val result          = outcomeResultBuilder.buildMoveOutcomeResult(List(goose, ordinary))
+    //println(expectedMessage)
+    //println(result.message)
+    assert(expectedMessage == result.message)
+  }
+
 }
