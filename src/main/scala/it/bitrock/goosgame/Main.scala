@@ -4,8 +4,6 @@ import it.bitrock.goosgame.input.CommandDecoder
 
 object Main extends App {
 
-  val commandDecoder  = CommandDecoder(new GooseGame)
-  var executedMessage = ""
   println("************* THE GOOSE GAME ******************* ")
   println("   ===== Commands (input without '') ===== ")
   println(" - 'add player [playerName]' ---> Add new Player (ex.: 'add player Tom') ")
@@ -15,9 +13,11 @@ object Main extends App {
   println("************************************************ ")
   println()
 
+  val commandDecoder  = CommandDecoder(new GooseGame)
+  var executedMessage = ""
   while (executedMessage != "exit") {
-    val command         = commandDecoder.readUserInput()
-    val resultExecution = command.execute().message
+    val inputCommand    = commandDecoder.readUserInput()
+    val resultExecution = inputCommand.execute().message
     println(resultExecution)
     executedMessage = resultExecution
   }

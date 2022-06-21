@@ -4,7 +4,7 @@ import scala.annotation.tailrec
 
 class OutcomeResultBuilder {
 
-  def addPlayerCommandResult(
+  def addPlayerOutcomeResult(
       present: Boolean,
       playersNames: List[String]
   ): OutcomeResult = {
@@ -17,7 +17,7 @@ class OutcomeResultBuilder {
     }
   }
 
-  def buildMoveCommandResult(outcomeList: List[Outcome]): OutcomeResult = {
+  def buildMoveOutcomeResult(outcomeList: List[Outcome]): OutcomeResult = {
     if (outcomeList.size == 1) {
       val outcome = outcomeList.head
       OutcomeResult(
@@ -33,7 +33,7 @@ class OutcomeResultBuilder {
     }
   }
 
-  def playerNotFoundCommandResult(player: String): OutcomeResult =
+  def playerNotFoundOutcomeResult(player: String): OutcomeResult =
     OutcomeResult(s"Player $player not Found!")
 
   @tailrec

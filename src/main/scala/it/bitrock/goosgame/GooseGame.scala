@@ -14,13 +14,13 @@ class GooseGame {
   def addPNewPlayer(newPlayer: String): OutcomeResult = {
     players.find(p => p._1 == newPlayer) match {
       case Some(p) =>
-        commandResultBuilder.addPlayerCommandResult(
+        commandResultBuilder.addPlayerOutcomeResult(
           true,
           List(newPlayer)
         )
       case (None) =>
         players = players + (newPlayer -> 0)
-        commandResultBuilder.addPlayerCommandResult(
+        commandResultBuilder.addPlayerOutcomeResult(
           false,
           players.keys.toList
         )
@@ -60,11 +60,11 @@ class GooseGame {
           doMovePlayer(player, dices, outcomeListUpdate)
         } else {
           updatePosition(outcomeListUpdate.head)
-          commandResultBuilder.buildMoveCommandResult(outcomeListUpdate)
+          commandResultBuilder.buildMoveOutcomeResult(outcomeListUpdate)
         }
 
       case (None) =>
-        commandResultBuilder.playerNotFoundCommandResult(player)
+        commandResultBuilder.playerNotFoundOutcomeResult(player)
     }
   }
 
@@ -131,8 +131,8 @@ object TestMovePlayer extends App {
   //val bounceResult = goose.movePlayer("John", (44, 13))
   //println(bounceResult.message)
 
-  val winResult = goose.movePlayer("John", (1, 1))
-  println(winResult.message)
+  //val winResult = goose.movePlayer("John", (1, 1))
+  //println(winResult.message)
 }
 
 object TestBounceAndWin extends App {
