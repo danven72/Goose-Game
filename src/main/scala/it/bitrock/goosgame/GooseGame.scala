@@ -15,15 +15,21 @@ class GooseGame {
   def addPNewPlayer(newPlayer: String): CommandResult = {
     players.find(p => p._1 == newPlayer) match {
       case Some(p) =>
-        commandResultBuilder.addPlayerCommandResult(newPlayer, true)
+        commandResultBuilder.addPlayerCommandResult(
+          true,
+          List(newPlayer)
+        )
       case (None) =>
         players = players + (newPlayer -> 0)
-        commandResultBuilder.addPlayerCommandResult(newPlayer, false)
+        commandResultBuilder.addPlayerCommandResult(
+          false,
+          players.keys.toList
+        )
     }
   }
 
-  def movePlayer(player: String, dice1: Int, dice2: Int): CommandResult = {
-    doMovePlayer(player, Tuple2(dice1, dice2), List())
+  def movePlayer(player: String, dices: (Int, Int)): CommandResult = {
+    doMovePlayer(player, dices, List())
   }
 
   def movePlayer(player: String): CommandResult = {
@@ -99,25 +105,36 @@ class GooseGame {
 //TODO: Move to TestCase class
 object TestAddNewPlayer extends App {
   val goose = new GooseGame()
+
+  val resultJohn = goose.addPNewPlayer("John");
+  println(resultJohn.message)
+
+  val resultTom = goose.addPNewPlayer(("Tom"))
+  println(resultTom.message)
+
+  val resultMary = goose.addPNewPlayer(("Mary"))
+  println(resultMary.message)
+
+}
+
+object TestAddNewPlayerWhenPlayerAlredyPresent extends App {
+  val goose = new GooseGame()
   val resultJohn = goose.addPNewPlayer("John");
   println(resultJohn.message)
   val resultJohn2 = goose.addPNewPlayer("John");
   println(resultJohn2.message)
-
-  //println(goose.players)
 }
-
 object TestMovePlayer extends App {
   val goose = new GooseGame()
   val resultJohn = goose.addPNewPlayer("John");
 
-  val moveResult = goose.movePlayer("John", 4, 4)
+  val moveResult = goose.movePlayer("John", (4, 4))
   println(moveResult.message)
 
-  val bounceResult = goose.movePlayer("John", 44, 13)
+  val bounceResult = goose.movePlayer("John", (44, 13))
   println(bounceResult.message)
 
-  val winResult = goose.movePlayer("John", 1, 1)
+  val winResult = goose.movePlayer("John", (1, 1))
   println(winResult.message)
 }
 
@@ -125,10 +142,10 @@ object TestMoveBridge extends App {
   val goose = new GooseGame()
   val resultJohn = goose.addPNewPlayer("John");
 
-  val move1 = goose.movePlayer("John", 2, 2)
+  val move1 = goose.movePlayer("John", (2, 2))
   println(move1.message)
 
-  val moveResult = goose.movePlayer("John", 1, 1)
+  val moveResult = goose.movePlayer("John", (1, 1))
   println(moveResult.message)
 
 }
@@ -138,10 +155,10 @@ object TestMoveSimpleGoose extends App {
   val resultJohn = goose.addPNewPlayer("John");
   println(resultJohn.message)
 
-  val move1 = goose.movePlayer("John", 1, 2)
+  val move1 = goose.movePlayer("John", (1, 2))
   println(move1.message)
 
-  val gooseResult = goose.movePlayer("John", 1, 1)
+  val gooseResult = goose.movePlayer("John", (1, 1))
   println(gooseResult.message)
 
 }
@@ -150,10 +167,10 @@ object TestMoveMultipleGoose extends App {
   val goose = new GooseGame()
   val resultJohn = goose.addPNewPlayer("John");
 
-  val move1 = goose.movePlayer("John", 5, 5)
+  val move1 = goose.movePlayer("John", (5, 5))
   println(move1.message)
 
-  val moveResult = goose.movePlayer("John", 2, 2)
+  val moveResult = goose.movePlayer("John", (2, 2))
   println(moveResult.message)
 
 }
@@ -176,9 +193,9 @@ object testPrankResult extends App {
   goose.addPNewPlayer("Pippo")
   goose.addPNewPlayer("Pluto")
 
-  println(goose.movePlayer("Pippo", 1, 14))
-  println(goose.movePlayer("Pluto", 1, 16))
+  println(goose.movePlayer("Pippo", (1, 14)))
+  println(goose.movePlayer("Pluto", (1, 16)))
   println(goose.players)
-  println(goose.movePlayer("Pippo", 1, 1).message)
+  println(goose.movePlayer("Pippo", (1, 1)).message)
   println(goose.players)
 }
