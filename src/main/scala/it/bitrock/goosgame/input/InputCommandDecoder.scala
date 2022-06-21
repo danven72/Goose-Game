@@ -2,21 +2,18 @@ package it.bitrock.goosgame.input
 
 import it.bitrock.goosgame.GooseGame
 
-import scala.io.StdIn._
+case class InputCommandDecoder(gooseGame: GooseGame) extends App {
 
-case class CommandDecoder(gooseGame: GooseGame) extends App {
-
-  def readUserInput(): InputCommand = {
-    val input = readLine()
+  def readUserInput(input: String): InputCommand = {
     input match {
-      case i if i.startsWith(CommandDecoder.ADD_PLAYER) =>
-        val player = i.substring((CommandDecoder.ADD_PLAYER.size), i.size)
+      case i if i.startsWith(InputCommandDecoder.ADD_PLAYER) =>
+        val player = i.substring((InputCommandDecoder.ADD_PLAYER.size), i.size)
         //println("[" + player + "]")
-        AddPNewPlayerCommand(
+        AddNewPlayerCommand(
           gooseGame,
           player
         )
-      case i if i.startsWith(CommandDecoder.MOVE) =>
+      case i if i.startsWith(InputCommandDecoder.MOVE) =>
         val playerNameAnDices = extractPlayerNameAndDicesFromMove(i)
         //println(playerNameAnDices)
         if (playerNameAnDices._2 == 0 && playerNameAnDices._3 == 0)
@@ -32,55 +29,28 @@ case class CommandDecoder(gooseGame: GooseGame) extends App {
     }
   }
 
-  private def extractPlayerNameAndDicesFromMove(
+  // public for Test porpoise
+  def extractPlayerNameAndDicesFromMove(
       input: String
   ): (String, Int, Int) = {
-    val nameAndDices = input.substring(CommandDecoder.MOVE.size, input.size)
+    val nameAndDices = input.substring(InputCommandDecoder.MOVE.size, input.size)
     if (nameAndDices.last.isDigit) {
       val player = nameAndDices.substring(0, nameAndDices.length - 5)
       val dice1 =
         nameAndDices.substring(player.length + 1, nameAndDices.length - 3).toInt
       val dice2 = nameAndDices.last.toString.toInt
+      /*
       println(
         "player: [" + player + "] dice1: [" + dice1 + "], dice2: [" + dice2 + "]"
-      )
+      )*/
       (player, dice1, dice2)
     } else
       (nameAndDices, 0, 0)
   }
 }
 
-object CommandDecoder {
+object InputCommandDecoder {
   val ADD_PLAYER = "add player "
   val MOVE       = "move "
 
-}
-
-object TestCommandDecoder extends App {
-  val commandDecoder = CommandDecoder(new GooseGame)
-  val inputCommand   = commandDecoder.readUserInput()
-  println(inputCommand.execute().message)
-}
-
-object TestExtractPlayerName extends App {
-  val commandDecoder = CommandDecoder(new GooseGame)
-  val inputCommand   = commandDecoder.readUserInput()
-}
-
-//write "exit" at prompt
-object TestExit extends App {
-  val commandDecoder = CommandDecoder(new GooseGame)
-  val exitCommand    = commandDecoder.readUserInput()
-  println(exitCommand.execute().message)
-}
-
-object TestGame extends App {
-  val commandDecoder  = CommandDecoder(new GooseGame)
-  var executedMessage = ""
-  while (executedMessage != "exit") {
-    val command         = commandDecoder.readUserInput()
-    val resultExecution = command.execute().message
-    println(resultExecution)
-    executedMessage = resultExecution
-  }
 }

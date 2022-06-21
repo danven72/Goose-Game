@@ -1,6 +1,6 @@
 package it.bitrock.goosgame
-
-import it.bitrock.goosgame.input.CommandDecoder
+import scala.io.StdIn._
+import it.bitrock.goosgame.input.InputCommandDecoder
 
 object Main extends App {
 
@@ -13,10 +13,10 @@ object Main extends App {
   println("************************************************ ")
   println()
 
-  val commandDecoder  = CommandDecoder(new GooseGame)
+  val commandDecoder  = InputCommandDecoder(new GooseGame)
   var executedMessage = ""
   while (executedMessage != "exit") {
-    val inputCommand    = commandDecoder.readUserInput()
+    val inputCommand    = commandDecoder.readUserInput(readLine())
     val resultExecution = inputCommand.execute().message
     println(resultExecution)
     executedMessage = resultExecution
