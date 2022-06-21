@@ -25,7 +25,7 @@ case class InputCommandDecoder(gooseGame: GooseGame) extends App {
             (playerNameAnDices._2, playerNameAnDices._3)
           )
       case "exit" => ExitCommand()
-      case _      => throw new RuntimeException("Input not found")
+      case _      => UnknownCommand(input)
     }
   }
 

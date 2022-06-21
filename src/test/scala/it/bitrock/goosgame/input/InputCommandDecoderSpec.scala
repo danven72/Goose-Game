@@ -43,9 +43,13 @@ class InputCommandDecoderSpec extends AnyFunSuite {
   }
 
   test("testReadUserInput when exit input") {
-    val addInputCommand = inputCommandDecoder.readUserInput("exit")
-    assert(addInputCommand.isInstanceOf[ExitCommand])
+    val exitInputCommand = inputCommandDecoder.readUserInput("exit")
+    assert(exitInputCommand.isInstanceOf[ExitCommand])
+  }
 
+  test("testReadUserInput when unknown input") {
+    val unknownInputCommand = inputCommandDecoder.readUserInput("unknown command")
+    assert(unknownInputCommand.isInstanceOf[UnknownCommand])
   }
 
 }
