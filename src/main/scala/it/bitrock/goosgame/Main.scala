@@ -1,7 +1,9 @@
 package it.bitrock.goosgame
 import scala.io.StdIn._
 import it.bitrock.goosgame.input.{InputCommandDecoder, UnknownCommand}
-import it.bitrock.goosgame.outcomes.OutcomeResultBuilder
+import it.bitrock.goosgame.outcomes.{OutcomeResultBuilder, Win}
+
+import scala.annotation.tailrec
 
 class Main {
   val outcomeResultBuilder = new OutcomeResultBuilder
@@ -17,20 +19,21 @@ class Main {
     println(" - 'exit' ---> Exit the game")
     println("************************************************ ")
     println()
-
   }
 
-  def play(): Unit = {
+  @tailrec
+  final def play(): Unit = {
     val inputCommand    = commandDecoder.readUserInput(readLine())
     val resultExecution = inputCommand.execute().message
     if (resultExecution != "exit") {
       println(resultExecution)
-      inputCommand match {
-        case UnknownCommand(p) =>
-          displayCommands()
-          play()
-        case _ => play()
-      }
+      if (!resultExecution.contains("Wins"))
+        inputCommand match {
+          case UnknownCommand(p) =>
+            displayCommands()
+            play()
+          case _ => play()
+        }
     }
   }
 }

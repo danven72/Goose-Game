@@ -1,12 +1,13 @@
 package it.bitrock.goosgame.input
 
 import it.bitrock.goosgame.GooseGame
+import it.bitrock.goosgame.outcomes.OutcomeResultBuilder
 import org.scalatest.funsuite.AnyFunSuite
 
 class InputCommandDecoderSpec extends AnyFunSuite {
-
-  val gooseGame           = new GooseGame
-  val inputCommandDecoder = InputCommandDecoder(gooseGame)
+  val outcomeResultBuilder = new OutcomeResultBuilder
+  val gooseGame            = GooseGame(outcomeResultBuilder)
+  val inputCommandDecoder  = InputCommandDecoder(gooseGame)
 
   test("testExtractPlayerNameAndDicesFromMove when dices in input") {
     val result = inputCommandDecoder.extractPlayerNameAndDicesFromMove("move Tom 3, 5")

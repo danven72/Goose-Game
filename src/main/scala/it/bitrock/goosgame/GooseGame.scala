@@ -37,10 +37,10 @@ case class GooseGame(outcomeResultBuilder: OutcomeResultBuilder) {
   }
 
   private def doMovePlayer(player: String, dices: (Int, Int), previousOutcome: List[Outcome]): OutcomeResult = {
-    players.find(p => p._1 == player) match {
+    players.get(player) match {
       case Some(p) =>
-        val oldPosition         = p._2
-        val theoreticalPosition = sum(p._2, sum(dices._1, dices._2))
+        val oldPosition         = p
+        val theoreticalPosition = sum(p, sum(dices._1, dices._2))
         val outcome = Outcome(
           player,
           dices,
