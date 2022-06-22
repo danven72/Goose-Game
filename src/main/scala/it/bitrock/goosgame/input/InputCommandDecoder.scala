@@ -24,8 +24,8 @@ case class InputCommandDecoder(gooseGame: GooseGame) extends App {
             playerNameAnDices._1,
             (playerNameAnDices._2, playerNameAnDices._3)
           )
-      case "exit" => ExitCommand()
-      case _      => UnknownCommand(input)
+      case "exit" => ExitCommand(gooseGame)
+      case _      => UnknownCommand(gooseGame, input)
     }
   }
 

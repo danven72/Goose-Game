@@ -9,11 +9,11 @@ class OutcomeResultBuilder {
       playersNames: List[String]
   ): OutcomeResult = {
     if (present)
-      OutcomeResult(s"${playersNames.last}: already existing player", valuateLastOutcome(null))
+      OutcomeResult(s"${playersNames.last}: already existing player", false)
     else {
       OutcomeResult(
         "players: " + playerListNames(playersNames.tail, playersNames.head),
-        valuateLastOutcome(null)
+        false
       )
     }
   }
@@ -23,7 +23,7 @@ class OutcomeResultBuilder {
       val outcome = outcomeList.head
       OutcomeResult(
         outcome.buildBaseMoveMessage + outcome.buildSpecificMoveMessage(),
-        valuateLastOutcome(outcome)
+        outcome.isInstanceOf[Win]
       )
     } else {
       OutcomeResult(
@@ -31,16 +31,19 @@ class OutcomeResultBuilder {
           outcomeList,
           ""
         ),
-        valuateLastOutcome(outcomeList.last)
+        outcomeList.last.isInstanceOf[Win]
       )
     }
   }
 
-  def playerNotFoundOutcomeResult(player: String): OutcomeResult =
-    OutcomeResult(s"Player $player not Found!", valuateLastOutcome(null))
+  def buildExitOutcomeResult(): OutcomeResult =
+    OutcomeResult("You force program exit", true)
 
-  private val valuateLastOutcome: Outcome => Boolean = (outcome: Outcome) =>
-    (outcome != null && outcome.isInstanceOf[Win])
+  def buildUnknownCommandOutcomeResult(inputCommand: String): OutcomeResult =
+    OutcomeResult(s"Command [${inputCommand}] unknown!", false)
+
+  def playerNotFoundOutcomeResult(player: String): OutcomeResult =
+    OutcomeResult(s"Player $player not Found!", false)
 
   @tailrec
   private def playerListNames(
@@ -68,5 +71,4 @@ class OutcomeResultBuilder {
         buildGooseMovesMessage(outcomeList.tail, allGooseMessages)
     }
   }
-
 }

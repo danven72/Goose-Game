@@ -36,6 +36,13 @@ case class GooseGame(outcomeResultBuilder: OutcomeResultBuilder) {
     doMovePlayer(player, dices, List())
   }
 
+  def exit(): OutcomeResult = {
+    outcomeResultBuilder.buildExitOutcomeResult()
+  }
+
+  def unknownInput(input: String): OutcomeResult =
+    outcomeResultBuilder.buildUnknownCommandOutcomeResult(input)
+
   private def doMovePlayer(player: String, dices: (Int, Int), previousOutcome: List[Outcome]): OutcomeResult = {
     players.get(player) match {
       case Some(p) =>

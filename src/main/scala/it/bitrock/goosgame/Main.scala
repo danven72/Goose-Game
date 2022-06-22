@@ -32,7 +32,7 @@ class Main {
       System.exit(0)
     } else {
       inputCommand match {
-        case UnknownCommand(p) =>
+        case UnknownCommand(p1, p2) =>
           displayCommands()
           play()
         case _ => play()

@@ -64,4 +64,17 @@ class OutcomeResultBuilderSpec extends AnyFunSuite {
     assert(result.isLastOutcome == true)
   }
 
+  test("testBuildExitOutcomeResult") {
+    val result = outcomeResultBuilder.buildExitOutcomeResult()
+    assert("You force program exit" == result.message)
+    assert(result.isLastOutcome)
+  }
+
+  test("testBuildUnknownCommandOutcomeResult") {
+    val unknownCommand = "UNKNOWN"
+    val result         = outcomeResultBuilder.buildUnknownCommandOutcomeResult(unknownCommand)
+    assert(s"Command [${unknownCommand}] unknown!" == result.message)
+    assert(!result.isLastOutcome)
+  }
+
 }

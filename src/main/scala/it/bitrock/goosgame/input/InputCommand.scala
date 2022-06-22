@@ -7,35 +7,33 @@ sealed trait InputCommand {
   def execute(): OutcomeResult
 }
 
-abstract class AbstractInputCommand extends InputCommand {}
-
-case class AddNewPlayerCommand(gooseGame: GooseGame, player: String) extends AbstractInputCommand {
+case class AddNewPlayerCommand(gooseGame: GooseGame, player: String) extends InputCommand {
   override def execute(): OutcomeResult = {
     gooseGame.addPNewPlayer(player)
   }
 }
 
 case class MovePlayerExternalDicesCommand(gooseGame: GooseGame, player: String, dices: (Int, Int))
-    extends AbstractInputCommand {
+    extends InputCommand {
   override def execute(): OutcomeResult = {
     gooseGame.movePlayer(player, dices)
   }
 }
 
-case class MovePlayerAutoDicesCommand(gooseGame: GooseGame, player: String) extends AbstractInputCommand {
+case class MovePlayerAutoDicesCommand(gooseGame: GooseGame, player: String) extends InputCommand {
   override def execute(): OutcomeResult = {
     gooseGame.movePlayer(player)
   }
 }
 
-case class ExitCommand() extends AbstractInputCommand {
+case class ExitCommand(gooseGame: GooseGame) extends InputCommand {
   override def execute(): OutcomeResult = {
-    OutcomeResult("You force program exit", true)
+    gooseGame.exit()
   }
 }
 
-case class UnknownCommand(inputCommand: String) extends AbstractInputCommand {
+case class UnknownCommand(gooseGame: GooseGame, inputCommand: String) extends InputCommand {
   override def execute(): OutcomeResult = {
-    OutcomeResult(s"Command [${inputCommand}] unknown!", false)
+    gooseGame.unknownInput(inputCommand)
   }
 }
