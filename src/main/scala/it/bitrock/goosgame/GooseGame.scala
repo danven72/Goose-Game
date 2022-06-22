@@ -5,7 +5,6 @@ import scala.util.Random
 
 case class GooseGame(outcomeResultBuilder: OutcomeResultBuilder) {
 
-  //val outcomeResultBuilder           = new OutcomeResultBuilder
   val random                         = new Random
   private val sum: (Int, Int) => Int = (d1: Int, d2: Int) => d1 + d2
 
@@ -45,9 +44,8 @@ case class GooseGame(outcomeResultBuilder: OutcomeResultBuilder) {
 
   private def doMovePlayer(player: String, dices: (Int, Int), previousOutcome: List[Outcome]): OutcomeResult = {
     players.get(player) match {
-      case Some(p) =>
-        val oldPosition         = p
-        val theoreticalPosition = sum(p, sum(dices._1, dices._2))
+      case Some(oldPosition) =>
+        val theoreticalPosition = sum(oldPosition, sum(dices._1, dices._2))
         val outcome = Outcome(
           player,
           dices,
@@ -73,14 +71,11 @@ case class GooseGame(outcomeResultBuilder: OutcomeResultBuilder) {
   private def updatePosition(outcome: Outcome): Unit = {
     outcome.prankPlayer match {
       case None =>
-        players = players - outcome.player
-        players = players + (outcome.player -> outcome.realPosition)
+        players = players.updated(outcome.player, outcome.realPosition)
 
       case Some(p) =>
-        players = players - outcome.player
-        players = players - p._1
-        players = players + (outcome.player -> outcome.realPosition)
-        players = players + (p._1           -> p._2)
+        players = players.updated(outcome.player, outcome.realPosition)
+        players = players.updated(p._1, p._2)
     }
   }
 
