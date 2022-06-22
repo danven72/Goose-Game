@@ -9,10 +9,11 @@ class OutcomeResultBuilder {
       playersNames: List[String]
   ): OutcomeResult = {
     if (present)
-      OutcomeResult(s"${playersNames.last}: already existing player")
+      OutcomeResult(s"${playersNames.last}: already existing player", valuateLastOutcome(null))
     else {
       OutcomeResult(
-        "players: " + playerListNames(playersNames.tail, playersNames.head)
+        "players: " + playerListNames(playersNames.tail, playersNames.head),
+        valuateLastOutcome(null)
       )
     }
   }
@@ -21,20 +22,25 @@ class OutcomeResultBuilder {
     if (outcomeList.size == 1) {
       val outcome = outcomeList.head
       OutcomeResult(
-        outcome.buildBaseMoveMessage + outcome.buildSpecificMoveMessage()
+        outcome.buildBaseMoveMessage + outcome.buildSpecificMoveMessage(),
+        valuateLastOutcome(outcome)
       )
     } else {
       OutcomeResult(
         outcomeList.head.buildBaseMoveMessage + buildGooseMovesMessage(
           outcomeList,
           ""
-        )
+        ),
+        valuateLastOutcome(outcomeList.last)
       )
     }
   }
 
   def playerNotFoundOutcomeResult(player: String): OutcomeResult =
-    OutcomeResult(s"Player $player not Found!")
+    OutcomeResult(s"Player $player not Found!", valuateLastOutcome(null))
+
+  private val valuateLastOutcome: Outcome => Boolean = (outcome: Outcome) =>
+    (outcome != null && outcome.isInstanceOf[Win])
 
   @tailrec
   private def playerListNames(

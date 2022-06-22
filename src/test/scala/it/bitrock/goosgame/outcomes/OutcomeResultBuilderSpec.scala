@@ -32,7 +32,9 @@ class OutcomeResultBuilderSpec extends AnyFunSuite {
   test("playerNotFoundOutcomeResult") {
     val player          = "Tom"
     val messageExpected = s"Player $player not Found!"
-    assert(messageExpected == outcomeResultBuilder.playerNotFoundOutcomeResult(player).message)
+    val result          = outcomeResultBuilder.playerNotFoundOutcomeResult(player)
+    assert(messageExpected == result.message)
+    assert(result.isLastOutcome == false)
   }
 
   test("buildMoveOutcomeResult when one Outcome present") {
@@ -40,6 +42,7 @@ class OutcomeResultBuilderSpec extends AnyFunSuite {
     val expectedMessage = ordinary.buildBaseMoveMessage + ordinary.buildSpecificMoveMessage()
     val result          = outcomeResultBuilder.buildMoveOutcomeResult(List(ordinary))
     assert(expectedMessage == result.message)
+    assert(result.isLastOutcome == false)
   }
 
   test("buildMoveOutcomeResult when one Goose and one Outcome present") {
@@ -50,6 +53,15 @@ class OutcomeResultBuilderSpec extends AnyFunSuite {
     //println(expectedMessage)
     //println(result.message)
     assert(expectedMessage == result.message)
+    assert(result.isLastOutcome == false)
+  }
+
+  test("buildMoveOutcomeResult when one Outcome Win is the last") {
+    val win             = Win("Tom", (2, 2), 59, 63, 63, None)
+    val expectedMessage = win.buildBaseMoveMessage + win.buildSpecificMoveMessage()
+    val result          = outcomeResultBuilder.buildMoveOutcomeResult(List(win))
+    println(result.message)
+    assert(result.isLastOutcome == true)
   }
 
 }

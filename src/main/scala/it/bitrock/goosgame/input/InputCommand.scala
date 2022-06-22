@@ -30,12 +30,12 @@ case class MovePlayerAutoDicesCommand(gooseGame: GooseGame, player: String) exte
 
 case class ExitCommand() extends AbstractInputCommand {
   override def execute(): OutcomeResult = {
-    OutcomeResult("exit")
+    OutcomeResult("You force program exit", true)
   }
 }
 
 case class UnknownCommand(inputCommand: String) extends AbstractInputCommand {
   override def execute(): OutcomeResult = {
-    OutcomeResult(s"Command [${inputCommand}] unknown!")
+    OutcomeResult(s"Command [${inputCommand}] unknown!", false)
   }
 }

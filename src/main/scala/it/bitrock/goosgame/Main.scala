@@ -23,17 +23,20 @@ class Main {
 
   @tailrec
   final def play(): Unit = {
-    val inputCommand    = commandDecoder.readUserInput(readLine())
-    val resultExecution = inputCommand.execute().message
-    if (resultExecution != "exit") {
-      println(resultExecution)
-      if (!resultExecution.contains("Wins"))
-        inputCommand match {
-          case UnknownCommand(p) =>
-            displayCommands()
-            play()
-          case _ => play()
-        }
+    val inputCommand         = commandDecoder.readUserInput(readLine())
+    val outcomeResult        = inputCommand.execute()
+    val outcomeResultMessage = outcomeResult.message
+
+    println(outcomeResultMessage)
+    if (outcomeResult.isLastOutcome) {
+      System.exit(0)
+    } else {
+      inputCommand match {
+        case UnknownCommand(p) =>
+          displayCommands()
+          play()
+        case _ => play()
+      }
     }
   }
 }

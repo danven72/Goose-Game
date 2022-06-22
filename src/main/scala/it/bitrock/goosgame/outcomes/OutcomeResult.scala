@@ -1,3 +1,3 @@
 package it.bitrock.goosgame.outcomes
 
-case class OutcomeResult(message: String) {}
+case class OutcomeResult(message: String, isLastOutcome: Boolean) {}
