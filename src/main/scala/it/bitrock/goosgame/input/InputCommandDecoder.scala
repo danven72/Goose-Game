@@ -34,23 +34,22 @@ case class InputCommandDecoder(gooseGame: GooseGame) extends App {
       input: String
   ): (String, Int, Int) = {
     val nameAndDices = input.substring(InputCommandDecoder.MOVE.size, input.size)
+    //println(s"nameAndDices: [$nameAndDices]")
     if (nameAndDices.last.isDigit) {
-      val player = nameAndDices.substring(0, nameAndDices.length - 5)
-      val dice1 =
-        nameAndDices.substring(player.length + 1, nameAndDices.length - 3).toInt
-      val dice2 = nameAndDices.last.toString.toInt
-      /*
-      println(
-        "player: [" + player + "] dice1: [" + dice1 + "], dice2: [" + dice2 + "]"
-      )*/
-      (player, dice1, dice2)
+      val player = nameAndDices.substring(0, nameAndDices.indexOf(" "))
+      //println(s"player: [$player]")
+      val dice1 = nameAndDices.substring(player.length + 1, nameAndDices.indexOf(","))
+      //println(s"dice1: [$dice1]")
+      val dice2 = nameAndDices.substring(nameAndDices.indexOf(",") + 2)
+      //println(s"dice2: [$dice2]")
+      (player, dice1.toInt, dice2.toInt)
     } else
       (nameAndDices, 0, 0)
   }
 }
 
 object InputCommandDecoder {
-  val ADD_PLAYER = "add player "
-  val MOVE       = "move "
+  private val ADD_PLAYER = "add player "
+  private val MOVE       = "move "
 
 }

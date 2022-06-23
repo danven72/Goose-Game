@@ -42,8 +42,11 @@ class OutcomeResultBuilder {
   def buildUnknownCommandOutcomeResult(inputCommand: String): OutcomeResult =
     OutcomeResult(s"Command [${inputCommand}] unknown!", false)
 
-  def playerNotFoundOutcomeResult(player: String): OutcomeResult =
+  def buildPlayerNotFoundOutcomeResult(player: String): OutcomeResult =
     OutcomeResult(s"Player $player not Found!", false)
+
+  def buildDicesNotValidOutcomeResult(dices: (Int, Int)): OutcomeResult =
+    OutcomeResult(s"Dices not valid! You asks: [${dices._1}, ${dices._2}] but only 1..6 values are ok", false)
 
   @tailrec
   private def playerListNames(

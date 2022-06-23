@@ -29,10 +29,10 @@ class OutcomeResultBuilderSpec extends AnyFunSuite {
     assert(messageExpected == result.message)
   }
 
-  test("playerNotFoundOutcomeResult") {
+  test("testBuildPlayerNotFoundOutcomeResult") {
     val player          = "Tom"
     val messageExpected = s"Player $player not Found!"
-    val result          = outcomeResultBuilder.playerNotFoundOutcomeResult(player)
+    val result          = outcomeResultBuilder.buildPlayerNotFoundOutcomeResult(player)
     assert(messageExpected == result.message)
     assert(result.isLastOutcome == false)
   }
@@ -74,6 +74,15 @@ class OutcomeResultBuilderSpec extends AnyFunSuite {
     val unknownCommand = "UNKNOWN"
     val result         = outcomeResultBuilder.buildUnknownCommandOutcomeResult(unknownCommand)
     assert(s"Command [${unknownCommand}] unknown!" == result.message)
+    assert(!result.isLastOutcome)
+  }
+
+  test("testBuildDicesNotValidOutcomeResult") {
+    val dicesNotVald = (7, 0)
+    val result       = outcomeResultBuilder.buildDicesNotValidOutcomeResult(dicesNotVald)
+    assert(
+      s"Dices not valid! You asks: [${dicesNotVald._1}, ${dicesNotVald._2}] but only 1..6 values are ok" == result.message
+    )
     assert(!result.isLastOutcome)
   }
 

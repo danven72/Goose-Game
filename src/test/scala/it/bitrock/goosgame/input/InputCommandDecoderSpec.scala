@@ -53,4 +53,20 @@ class InputCommandDecoderSpec extends AnyFunSuite {
     assert(unknownInputCommand.isInstanceOf[UnknownCommand])
   }
 
+  test("testReadUserInput when move player external Dices input and numbers length more 1") {
+    val moveInputCommand = inputCommandDecoder.readUserInput("move Tom 23, 423")
+    assert(moveInputCommand.isInstanceOf[MovePlayerExternalDicesCommand])
+    assert("Tom" == moveInputCommand.asInstanceOf[MovePlayerExternalDicesCommand].player)
+    assert(23 == moveInputCommand.asInstanceOf[MovePlayerExternalDicesCommand].dices._1)
+    assert(423 == moveInputCommand.asInstanceOf[MovePlayerExternalDicesCommand].dices._2)
+  }
+
+  test("**** testReadUserInput when move player external Dices and player name length shorter than 3") {
+    val moveInputCommand = inputCommandDecoder.readUserInput("move Ho 6, 6")
+    assert(moveInputCommand.isInstanceOf[MovePlayerExternalDicesCommand])
+    assert("Ho" == moveInputCommand.asInstanceOf[MovePlayerExternalDicesCommand].player)
+    assert(6 == moveInputCommand.asInstanceOf[MovePlayerExternalDicesCommand].dices._1)
+    assert(6 == moveInputCommand.asInstanceOf[MovePlayerExternalDicesCommand].dices._2)
+  }
+
 }

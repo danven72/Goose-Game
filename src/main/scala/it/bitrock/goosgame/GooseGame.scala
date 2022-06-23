@@ -27,8 +27,14 @@ case class GooseGame(outcomeResultBuilder: OutcomeResultBuilder) {
   }
 
   def movePlayer(player: String, dices: (Int, Int)): OutcomeResult = {
-    doMovePlayer(player, dices, List())
+    println(isNotDiceValid(dices._1) + " " + isNotDiceValid(dices._2))
+    if (isNotDiceValid(dices._1) || isNotDiceValid(dices._2))
+      outcomeResultBuilder.buildDicesNotValidOutcomeResult(dices)
+    else
+      doMovePlayer(player, dices, List())
   }
+
+  private val isNotDiceValid: Int => Boolean = (dice: Int) => dice < 1 || dice > 6
 
   def movePlayer(player: String): OutcomeResult = {
     val dices = rollDices();
@@ -64,7 +70,7 @@ case class GooseGame(outcomeResultBuilder: OutcomeResultBuilder) {
           outcomeResultBuilder.buildMoveOutcomeResult(outcomeListUpdate)
         }
       case None =>
-        outcomeResultBuilder.playerNotFoundOutcomeResult(player)
+        outcomeResultBuilder.buildPlayerNotFoundOutcomeResult(player)
     }
   }
 
