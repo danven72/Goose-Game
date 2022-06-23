@@ -9,11 +9,10 @@ class OutcomeResultBuilder {
       playersNames: List[String]
   ): OutcomeResult = {
     if (present)
-      OutcomeResult(s"${playersNames.last}: already existing player", false)
+      OutcomeResult(s"${playersNames.last}: already existing player")
     else {
       OutcomeResult(
-        "players: " + playerListNames(playersNames.tail, playersNames.head),
-        false
+        "players: " + playerListNames(playersNames.tail, playersNames.head)
       )
     }
   }
@@ -40,13 +39,13 @@ class OutcomeResultBuilder {
     OutcomeResult("You force program exit", true)
 
   def buildUnknownCommandOutcomeResult(inputCommand: String): OutcomeResult =
-    OutcomeResult(s"Command [${inputCommand}] unknown!", false)
+    OutcomeResult(s"Command [${inputCommand}] unknown!")
 
   def buildPlayerNotFoundOutcomeResult(player: String): OutcomeResult =
-    OutcomeResult(s"Player $player not Found!", false)
+    OutcomeResult(s"Player $player not Found!")
 
   def buildDicesNotValidOutcomeResult(dices: (Int, Int)): OutcomeResult =
-    OutcomeResult(s"Dices not valid! You asks: [${dices._1}, ${dices._2}] but only 1..6 values are ok", false)
+    OutcomeResult(s"Dices not valid! You asks: [${dices._1}, ${dices._2}] but only 1..6 values are ok")
 
   @tailrec
   private def playerListNames(
