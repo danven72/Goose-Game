@@ -6,9 +6,9 @@ import it.bitrock.goosgame.outcomes.{OutcomeResultBuilder, Win}
 import scala.annotation.tailrec
 
 class Main {
-  val outcomeResultBuilder = new OutcomeResultBuilder
-  val gooseGame            = GooseGame(outcomeResultBuilder)
-  val commandDecoder       = InputCommandDecoder(gooseGame)
+  private val outcomeResultBuilder = new OutcomeResultBuilder
+  private val gooseGame            = GooseGame(outcomeResultBuilder)
+  private val commandDecoder       = InputCommandDecoder(gooseGame)
 
   def displayCommands(): Unit = {
     println("************* THE GOOSE GAME ******************* ")
