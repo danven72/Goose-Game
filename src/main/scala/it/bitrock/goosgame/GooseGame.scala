@@ -27,7 +27,6 @@ case class GooseGame(outcomeResultBuilder: OutcomeResultBuilder) {
   }
 
   def movePlayer(player: String, dices: (Int, Int)): OutcomeResult = {
-    println(isNotDiceValid(dices._1) + " " + isNotDiceValid(dices._2))
     if (isNotDiceValid(dices._1) || isNotDiceValid(dices._2))
       outcomeResultBuilder.buildDicesNotValidOutcomeResult(dices)
     else
