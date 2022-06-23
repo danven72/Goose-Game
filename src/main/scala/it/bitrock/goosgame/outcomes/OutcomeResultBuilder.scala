@@ -4,7 +4,7 @@ import scala.annotation.tailrec
 
 class OutcomeResultBuilder {
 
-  def addPlayerOutcomeResult(
+  def buildAddPlayerOutcomeResult(
       present: Boolean,
       playersNames: List[String]
   ): OutcomeResult = {

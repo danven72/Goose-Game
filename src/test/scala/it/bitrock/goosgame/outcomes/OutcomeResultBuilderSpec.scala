@@ -8,7 +8,7 @@ class OutcomeResultBuilderSpec extends AnyFunSuite {
   test("addPlayerOutcomeResult when first ") {
     val newPlayer       = "Tom"
     val messageExpected = "players: " + newPlayer
-    val result          = outcomeResultBuilder.addPlayerOutcomeResult(false, List(newPlayer))
+    val result          = outcomeResultBuilder.buildAddPlayerOutcomeResult(false, List(newPlayer))
     assert(messageExpected == result.message)
   }
 
@@ -17,7 +17,7 @@ class OutcomeResultBuilderSpec extends AnyFunSuite {
     val jack            = "Jack"
     val bill            = "Bill"
     val messageExpected = s"players: $tom, $jack, $bill"
-    val result          = outcomeResultBuilder.addPlayerOutcomeResult(false, List(tom, jack, bill))
+    val result          = outcomeResultBuilder.buildAddPlayerOutcomeResult(false, List(tom, jack, bill))
     assert(messageExpected == result.message)
   }
 
@@ -25,7 +25,7 @@ class OutcomeResultBuilderSpec extends AnyFunSuite {
     val tom = "Tom"
 
     val messageExpected = s"${tom}: already existing player"
-    val result          = outcomeResultBuilder.addPlayerOutcomeResult(true, List(tom))
+    val result          = outcomeResultBuilder.buildAddPlayerOutcomeResult(true, List(tom))
     assert(messageExpected == result.message)
   }
 

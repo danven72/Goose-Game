@@ -13,13 +13,13 @@ case class GooseGame(outcomeResultBuilder: OutcomeResultBuilder) {
   def addPNewPlayer(newPlayer: String): OutcomeResult = {
     players.find(p => p._1 == newPlayer) match {
       case Some(p) =>
-        outcomeResultBuilder.addPlayerOutcomeResult(
+        outcomeResultBuilder.buildAddPlayerOutcomeResult(
           true,
           List(newPlayer)
         )
       case (None) =>
         players = players + (newPlayer -> 0)
-        outcomeResultBuilder.addPlayerOutcomeResult(
+        outcomeResultBuilder.buildAddPlayerOutcomeResult(
           false,
           players.keys.toList
         )
