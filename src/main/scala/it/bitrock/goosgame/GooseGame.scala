@@ -99,7 +99,4 @@ case class GooseGame(outcomeResultBuilder: OutcomeResultBuilder) {
   ): Option[(String, Int)] = {
     players.find(p => p._2 == theoreticalPosition)
   }
-
-  def resetPlayers(): Unit =
-    players = Map.empty[String, Int]
 }

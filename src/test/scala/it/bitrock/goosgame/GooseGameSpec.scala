@@ -2,12 +2,19 @@ package it.bitrock.goosgame
 
 import it.bitrock.goosgame.outcomes.{Outcome, OutcomeResultBuilder}
 import org.mockito.Mockito._
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.mockito.MockitoSugar
 
-class GooseGameSpec extends AnyFunSuite with MockitoSugar {
-  val mockOutcomeResultBuilder = mock[OutcomeResultBuilder]
-  val goose                    = GooseGame(mockOutcomeResultBuilder)
+class GooseGameSpec extends AnyFunSuite with MockitoSugar with BeforeAndAfterEach {
+  var mockOutcomeResultBuilder = mock[OutcomeResultBuilder]
+  var goose                    = GooseGame(mockOutcomeResultBuilder)
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    mockOutcomeResultBuilder = mock[OutcomeResultBuilder]
+    goose = GooseGame(mockOutcomeResultBuilder)
+  }
 
   test("testAddNewPlayer") {
     val newPlayer = "Tom"
@@ -60,7 +67,6 @@ class GooseGameSpec extends AnyFunSuite with MockitoSugar {
   }
 
   test("testMovePlayer double Goose") {
-    goose.resetPlayers() //Why this happen?
     val player = "Thor"
     goose.addPNewPlayer(player)
     val dices1    = (5, 5)
