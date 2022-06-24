@@ -21,7 +21,7 @@ class OutcomeSpec extends AnyFunSuite {
     assert(messageExpected == ordinary.buildBaseMoveMessage)
   }
 
-  test("testBuildBaseMoveMessage When Initial position os 0") {
+  test("testBuildBaseMoveMessage When Initial position is 0") {
     val player   = "Tom"
     val ordinary = Outcome(player, Tuple2(1, 2), 0, 3, 3, None)
     val messageExpected =

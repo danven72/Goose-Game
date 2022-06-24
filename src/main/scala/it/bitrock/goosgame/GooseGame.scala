@@ -11,8 +11,8 @@ case class GooseGame(outcomeResultBuilder: OutcomeResultBuilder) {
   private var players: Map[String, Int] = Map.empty[String, Int]
 
   def addPNewPlayer(newPlayer: String): OutcomeResult = {
-    players.find(p => p._1 == newPlayer) match {
-      case Some(p) =>
+    players.get(newPlayer) match {
+      case Some(_) =>
         outcomeResultBuilder.buildAddPlayerOutcomeResult(
           true,
           List(newPlayer)
